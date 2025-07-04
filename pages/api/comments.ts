@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import clientPromise from '../../lib/mongodb';
-import { ObjectId } from "bson";
+import { ObjectId } from "mongodb";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./auth/[...nextauth]";
 

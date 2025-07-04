@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import {PostDetails} from "./post-details";
+import {PostCard} from "./post-card";
+import Link from "next/link";
 
 // Define a type for our post
-interface Post {
+export interface Post {
     _id: string;
     title: string;
     text: string;
@@ -55,7 +57,9 @@ export const Posts = () => {
         <div className="space-y-6">
             <h2 className="text-2xl font-bold mb-4">Posts</h2>
             {posts.map((post) => (
-                <PostDetails key={post._id} post={post}></PostDetails>
+                <Link href={`/blog/${post._id}`} key={post._id}>
+                    <PostCard post={post}></PostCard>
+                </Link>
             ))}
         </div>
     );
