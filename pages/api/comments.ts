@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import clientPromise from '../../lib/mongodb';
+import {clientPromise} from '../../lib/mongodb';
 import { ObjectId } from "mongodb";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./auth/[...nextauth]";
@@ -7,6 +7,7 @@ import { authOptions } from "./auth/[...nextauth]";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     // Get user session to check authentication
     const session = await getServerSession(req, res, authOptions);
+
 
     // Handle GET request (fetch comments)
     if (req.method === 'GET') {
@@ -32,6 +33,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             res.status(500).json({ error: "Failed to fetch comments" });
         }
     }
+
+
+
     // Handle POST request (add new comment)
     else if (req.method === 'POST') {
         // Check if user is authenticated

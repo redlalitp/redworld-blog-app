@@ -1,6 +1,6 @@
 import { GetServerSideProps } from 'next';
 import { ObjectId } from 'mongodb';
-import clientPromise from '../../lib/mongodb';
+import {clientPromise} from '../../lib/mongodb';
 import { PostDetails } from "../../components/post-details";
 import { Post } from "../../components/posts";
 import { Nav } from "../../components/nav";
