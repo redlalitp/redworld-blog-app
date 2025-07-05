@@ -85,6 +85,7 @@ export const PostSocialArea = ({post}:{post:Post}) => {
                 }
 
                 // Refresh likes
+                await fetchLikeStatus();
                 await fetchLikes();
 
             } catch (err) {
@@ -112,6 +113,7 @@ export const PostSocialArea = ({post}:{post:Post}) => {
                 }
 
                 // Refresh likes
+                await fetchLikeStatus();
                 await fetchLikes();
 
             } catch (err) {
