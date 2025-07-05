@@ -96,7 +96,7 @@ export const Posts = () => {
 
     const fetchPostLikesCount = async (post) => {
         try {
-            const response = await fetch(`/api/likeCount?postId=${post._id}`);
+            const response = await fetch(`/api/likes/count?postId=${post._id}`);
 
             if (!response.ok) {
                 throw new Error('Failed to fetch posts');
@@ -289,8 +289,8 @@ export const Posts = () => {
             {posts.length === 0 ? (
                 <div className="text-center p-4">No posts found.</div>
             ) : (
-                <div className="flex justify-evenly">
-                    {posts.map((post) => (
+                <div className="grid md:grid-cols-2 gap-6 mt-6">
+                    {posts.map((post, index) => (
                         <Link href={`/blog/${post._id}`} key={post._id}>
                             <PostCard post={post}></PostCard>
                         </Link>

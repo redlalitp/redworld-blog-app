@@ -1,13 +1,13 @@
-import { useSession, signIn, signOut } from "next-auth/react";
-import {Nav} from "../components/nav";
-import {Posts} from "../components/posts";
+import { Nav } from "../components/nav";
+import { Posts } from "../components/posts";
 
 export default function Home() {
-  const { data: session } = useSession();
   return (
-    <div className="p-6">
-      <Nav></Nav>
-        <Posts></Posts>
-    </div>
+      <div className="min-h-screen bg-gray-700 text-gray-200">
+        <Nav />
+        <main className="max-w-4xl mx-auto mt-6 px-4">
+          <Posts />
+        </main>
+      </div>
   );
 }

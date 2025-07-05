@@ -1,31 +1,47 @@
 "use client";
 
-import {useSession, signIn, signOut} from "next-auth/react";
+import { useSession, signIn, signOut } from "next-auth/react";
+import Link from "next/link";
 
 export const Nav = () => {
     const { data: session } = useSession();
+
     return (
-        <div className={"flex justify-between"} style={{height: "5vh"}}>
-        <h1 className="text-2xl font-bold float-left">Pratibimb Manache!!!</h1>
-        {
-            session ? (
-                <>
-                    <div className="flex flex-col">
-                        <div className={"flex"}>
-                            <img className={"size-8 border rounded-full"} src={session.user?.image} alt="user-image"></img>
-                            <p>{session.user?.name}</p>
-                        </div>
-                        <div>
-                            <p>{session.user?.email}</p>
+        <nav className="flex items-center justify-between px-6 py-3 bg-gray-900 shadow-md">
+            <Link href="/">
+                <h1 className="text-xl md:text-2xl font-bold text-white">
+                    Pratibimb Manache!!!
+                </h1>
+            </Link>
+
+            {session ? (
+                <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-2">
+                        <img
+                            className="w-8 h-8 rounded-full border"
+                            src={session.user?.image ?? ""}
+                            alt="user"
+                        />
+                        <div className="text-sm text-gray-200">
+                            <p className="font-medium">{session.user?.name}</p>
+                            <p className="text-xs text-gray-500">{session.user?.email}</p>
                         </div>
                     </div>
-                    <button onClick={() => signOut()}>Sign Out</button>
-
-                </>
+                    <button
+                        onClick={() => signOut()}
+                        className="px-4 py-2 text-sm bg-red-500 text-white rounded hover:bg-red-600 transition"
+                    >
+                        Sign Out
+                    </button>
+                </div>
             ) : (
-                <button onClick={() => signIn()}>Sign In</button>
-            )
-        }
-        </div>
-    )
-}
+                <button
+                    onClick={() => signIn()}
+                    className="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                >
+                    Sign In
+                </button>
+            )}
+        </nav>
+    );
+};

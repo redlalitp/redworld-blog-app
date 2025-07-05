@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import {clientPromise} from '../../lib/mongodb';
+import {clientPromise} from '../../../lib/mongodb';
 import { ObjectId } from "mongodb";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "./auth/[...nextauth]";
+import { authOptions } from "../auth/[...nextauth]";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     // Get user session to check authentication
@@ -21,14 +21,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const client = await clientPromise;
             const db = client.db("redworld-blog-app");
 
-            // Fetch likes count for a specific post from collection
-            const likesCount = await db.collection("likes")
+            // Fetch commentsCount for a specific post from collection
+            const commentsCount = await db.collection("comments")
                 .countDocuments({ post_id: new ObjectId(postId.toString()) })
 
-            res.status(200).json(likesCount);
+            res.status(200).json(commentsCount);
         } catch (error) {
-            console.error("Error fetching likesCount:", error);
-            res.status(500).json({ error: "Failed to fetch likesCount" });
+            console.error("Error fetching commentsCount:", error);
+            res.status(500).json({ error: "Failed to fetch commentsCount" });
         }
     } else {
         res.setHeader('Allow', ['GET']);
