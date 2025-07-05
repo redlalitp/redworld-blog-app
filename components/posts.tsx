@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from "next-auth/react";
 import { PostCard } from "./post-card";
 import Link from "next/link";
+import {MdPostAdd} from "react-icons/md";
 
 // Define a type for our post
 export interface Post {
@@ -165,7 +166,6 @@ export const Posts = () => {
 
     return (
         <div className="space-y-6">
-            <h2 className="text-2xl font-bold mb-4">Posts</h2>
 
             {session && session.user.role === 'admin' ? (
                 <>
@@ -173,22 +173,23 @@ export const Posts = () => {
                         onClick={() => setShowPostForm(!showPostForm)}
                         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                     >
-                        {showPostForm ? 'Cancel' : 'Add Post'}
+                        {showPostForm ? 'Cancel' : <MdPostAdd />}
                     </button>
 
                     {showPostForm && (
-                        <div className="mt-4 p-4 border rounded-lg">
-                            <h3 className="text-xl font-semibold mb-3">Create New Post</h3>
+                        <div className="mt-6 p-6 bg-zinc-900 border border-zinc-700 rounded-xl shadow-lg text-zinc-200 max-w-3xl mx-auto">
+                            <h3 className="text-2xl font-bold mb-4 text-white">📝 Create New Post</h3>
 
                             {formError && (
-                                <div className="mb-3 p-2 bg-red-100 text-red-700 rounded">
+                                <div className="mb-4 p-3 bg-red-500/10 text-red-400 border border-red-500 rounded">
                                     {formError}
                                 </div>
                             )}
 
                             <form onSubmit={handleSubmitPost}>
-                                <div className="mb-4">
-                                    <label htmlFor="post-title" className="block mb-1 font-medium">
+                                {/* Title */}
+                                <div className="mb-6">
+                                    <label htmlFor="post-title" className="block mb-1 font-semibold text-sm">
                                         Title
                                     </label>
                                     <input
@@ -196,91 +197,66 @@ export const Posts = () => {
                                         type="text"
                                         value={postTitle}
                                         onChange={(e) => setPostTitle(e.target.value)}
-                                        className="w-full border rounded p-2"
+                                        className="w-full bg-zinc-800 border border-zinc-600 text-white rounded px-3 py-2 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         placeholder="Enter post title"
                                         required
                                     />
                                 </div>
 
-                                <div className="mb-2">
-                                    <label htmlFor="post-text" className="block mb-1 font-medium">
+                                {/* Text Editor Controls */}
+                                <div className="mb-4">
+                                    <label htmlFor="post-text" className="block mb-1 font-semibold text-sm">
                                         Content
                                     </label>
-                                    <div className="flex flex-wrap gap-2 mb-2 bg-gray-100 p-2 rounded">
-                                        <button
-                                            type="button"
-                                            onClick={() => insertMarkup('bold')}
-                                            className="px-2 py-1 bg-white border rounded hover:bg-gray-200"
-                                            title="Bold"
-                                        >
-                                            <strong>B</strong>
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => insertMarkup('italic')}
-                                            className="px-2 py-1 bg-white border rounded hover:bg-gray-200"
-                                            title="Italic"
-                                        >
-                                            <em>I</em>
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => insertMarkup('heading')}
-                                            className="px-2 py-1 bg-white border rounded hover:bg-gray-200"
-                                            title="Heading"
-                                        >
-                                            H
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => insertMarkup('link')}
-                                            className="px-2 py-1 bg-white border rounded hover:bg-gray-200"
-                                            title="Link"
-                                        >
-                                            🔗
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => insertMarkup('list')}
-                                            className="px-2 py-1 bg-white border rounded hover:bg-gray-200"
-                                            title="List"
-                                        >
-                                            •
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => insertMarkup('code')}
-                                            className="px-2 py-1 bg-white border rounded hover:bg-gray-200"
-                                            title="Code"
-                                        >
-                                            &lt;/&gt;
-                                        </button>
+                                    <div className="flex flex-wrap gap-2 mb-2 bg-zinc-800 border border-zinc-600 p-3 rounded">
+                                        {[
+                                            { type: "bold", label: "B", title: "Bold" },
+                                            { type: "italic", label: "I", title: "Italic" },
+                                            { type: "heading", label: "H", title: "Heading" },
+                                            { type: "link", label: "🔗", title: "Link" },
+                                            { type: "list", label: "•", title: "List" },
+                                            { type: "code", label: "< />", title: "Code" },
+                                        ].map((btn) => (
+                                            <button
+                                                key={btn.type}
+                                                type="button"
+                                                onClick={() => insertMarkup(btn.type)}
+                                                className="text-sm bg-zinc-700 hover:bg-zinc-600 text-white px-3 py-1 rounded border border-zinc-600 transition"
+                                                title={btn.title}
+                                            >
+                                                {btn.label}
+                                            </button>
+                                        ))}
                                     </div>
+
+                                    {/* Textarea */}
                                     <textarea
                                         id="post-text"
                                         value={postText}
                                         onChange={(e) => setPostText(e.target.value)}
-                                        className="w-full border rounded p-2"
+                                        className="w-full bg-zinc-800 border border-zinc-600 text-white rounded px-3 py-2 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         rows={8}
-                                        placeholder="Write your post content here... Use the formatting buttons above to add markup."
+                                        placeholder="Write your post content here... Use the formatting buttons above."
                                         required
                                     />
-                                    <p className="text-xs text-gray-500 mt-1">
-                                        Supports Markdown: **bold**, *italic*, # heading, [link](url), - list item, `code`
+                                    <p className="text-xs text-zinc-400 mt-1">
+                                        Markdown supported: **bold**, *italic*, # heading, [link](url), - list item, `code`
                                     </p>
                                 </div>
 
+                                {/* Submit */}
                                 <div className="flex justify-end">
                                     <button
                                         type="submit"
                                         disabled={isSubmitting}
-                                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:bg-blue-300"
+                                        className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2 rounded shadow disabled:bg-blue-400 transition"
                                     >
-                                        {isSubmitting ? 'Creating...' : 'Create Post'}
+                                        {isSubmitting ? "Creating..." : "Create Post"}
                                     </button>
                                 </div>
                             </form>
                         </div>
+
                     )}
                 </>
             ) : (<h3></h3>)
