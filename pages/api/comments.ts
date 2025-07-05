@@ -76,8 +76,43 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             console.error("Error adding comment:", error);
             res.status(500).json({ error: "Failed to add comment" });
         }
-    } else {
-        res.setHeader('Allow', ['GET', 'POST']);
+    }
+    // ✅ DELETE comment (only by the original user)
+    else if (req.method === 'DELETE') {
+        if (!session) {
+            return res.status(401).json({ error: "You must be signed in to delete comments" });
+        }
+
+        try {
+            const { commentId } = req.body;
+
+            if (!commentId) {
+                return res.status(400).json({ error: "Comment ID is required" });
+            }
+
+            const client = await clientPromise;
+            const db = client.db("redworld-blog-app");
+
+            const comment = await db.collection("comments").findOne({ _id: new ObjectId(commentId) });
+
+            if (!comment) {
+                return res.status(404).json({ error: "Comment not found" });
+            }
+
+            if (comment.user_email !== session.user.email) {
+                return res.status(403).json({ error: "Unauthorized to delete this comment" });
+            }
+
+            await db.collection("comments").deleteOne({ _id: new ObjectId(commentId) });
+
+            return res.status(200).json({ success: true, message: "Comment deleted" });
+        } catch (error) {
+            console.error("Error deleting comment:", error);
+            return res.status(500).json({ error: "Failed to delete comment" });
+        }
+    }
+    else {
+        res.setHeader('Allow', ['GET', 'POST', 'DELETE']);
         res.status(405).end(`Method ${req.method} Not Allowed`);
     }
 }
