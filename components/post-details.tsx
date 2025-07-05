@@ -2,6 +2,7 @@
 
 import {Post} from "./posts";
 import {CommentsSection} from "./comments-section";
+import {PostSocialArea} from "./post-social-area";
 
 
 export const PostDetails = ({ post }:{post:Post}) => {
@@ -15,7 +16,7 @@ export const PostDetails = ({ post }:{post:Post}) => {
                     {new Date(post.date).toLocaleDateString()}
                 </p>
             )}
-
+            <PostSocialArea post={post}></PostSocialArea>
             <CommentsSection post={post}></CommentsSection>
         </div>
     );
