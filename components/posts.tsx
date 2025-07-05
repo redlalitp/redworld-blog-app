@@ -94,6 +94,24 @@ export const Posts = () => {
         }
     };
 
+    const fetchPostLikesCount = async (post) => {
+        try {
+            const response = await fetch(`/api/likeCount?postId=${post._id}`);
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch posts');
+            }
+
+            const data = await response.json();
+            setPosts(data);
+            setLoading(false);
+        } catch (err) {
+            console.error('Error fetching posts:', err);
+            setError('Failed to load posts. Please try again later.');
+            setLoading(false);
+        }
+    };
+
     // Text markup functions
     const insertMarkup = (markupType) => {
         const textarea = document.getElementById('post-text') as HTMLTextAreaElement;
