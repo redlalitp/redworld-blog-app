@@ -5,7 +5,7 @@ export const PostCard = ({ post }) => {
         <div className="max-w-sm rounded-xl overflow-hidden shadow-md bg-[#2b2b2b] border border-[#3c3f41] transition hover:shadow-xl hover:border-[#4e5254]">
             <img
                 className="w-full h-40 object-cover"
-                src="images/pawn-king.jpg"
+                src={`images/${post.image}.jpg`}
                 alt="Post image"
             />
 
