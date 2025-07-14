@@ -3,8 +3,20 @@
 import { Post } from "./posts";
 import { CommentsSection } from "./comments-section";
 import { PostSocialArea } from "./post-social-area";
+import {useBackground} from "../lib/background-context";
+import {useEffect} from "react";
 
 export const PostDetails = ({ post }: { post: Post }) => {
+
+    const { setBackground } = useBackground();
+
+    useEffect(() => {
+        setBackground(post.image);
+
+        // Optional cleanup
+        return () => setBackground('16');
+    }, [post, setBackground]);
+
     return (
         <div
             key={post._id}
