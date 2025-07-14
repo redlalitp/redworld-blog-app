@@ -13,6 +13,13 @@ export interface Post {
     text: string;
     date?: Date;
     author?: string;
+    image: string;
+    likes: number;
+    user_email: string;
+    comments: {
+        _id: string;
+        post_id: string;
+    }
 }
 
 export const Posts = () => {
@@ -263,9 +270,9 @@ export const Posts = () => {
             }
 
             {posts.length === 0 ? (
-                <div className="text-center p-4">No posts found.</div>
+                <div className="text-center p-4 scroll-auto">No posts found.</div>
             ) : (
-                <div className="grid md:grid-cols-2 gap-6 mt-6">
+                <div className="flex gap-6">
                     {posts.map((post, index) => (
                         <Link href={`/blog/${post._id}`} key={post._id}>
                             <PostCard post={post}></PostCard>
