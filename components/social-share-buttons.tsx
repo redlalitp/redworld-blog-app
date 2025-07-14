@@ -53,10 +53,10 @@ export const SocialShareButtons = ({ title, url }: SocialShareButtonsProps) => {
     };
 
     return (
-        <div className="mt-6 flex flex-wrap items-center gap-4 text-gray-400">
-      <span className="flex items-center gap-1 text-sm font-medium text-gray-500">
-        <FaShareAlt /> Share:
-      </span>
+        <div className="flex flex-wrap items-center gap-4 text-gray-400">
+          <span className="flex items-center gap-1 text-sm font-medium text-gray-500">
+            <FaShareAlt /> Share:
+          </span>
 
             <a
                 href={`https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`}

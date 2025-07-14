@@ -2,7 +2,7 @@ import { PostcardFooter } from "./postcard-footer";
 
 export const PostCard = ({ post }) => {
     return (
-        <div className="max-w-sm rounded-xl overflow-hidden shadow-md bg-[#2b2b2b] border border-[#3c3f41] transition hover:shadow-xl hover:border-[#4e5254]">
+        <div className="w-96 h-full rounded-xl overflow-hidden shadow-md bg-[#2b2b2b] border border-[#3c3f41] transition hover:shadow-xl hover:border-[#4e5254]">
             <img
                 className="w-full h-40 object-cover"
                 src={`images/${post.image}.jpg`}

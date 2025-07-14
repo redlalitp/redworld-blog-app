@@ -7,7 +7,7 @@ import { Nav } from "../../components/nav";
 
 export default function PostDetail({ post }: { post: Post }) {
     return (
-        <div className="p-6">
+        <div className="w-lvw h-svh flex flex-col">
             <Nav />
             <PostDetails post={post} />
         </div>

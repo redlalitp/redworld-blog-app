@@ -127,9 +127,10 @@ export const PostSocialArea = ({post}:{post:Post}) => {
     };
 
     return (
-        <div className="mt-6">
+        <div className="flex justify-between items-center">
+            <div className="flex items-center space-x-2">
             {session ? (
-                <form onSubmit={handleSubmitLike} className="mb-4">
+                <form onSubmit={handleSubmitLike}>
                     <button
                         type="submit"
                         disabled={isSubmitting}
@@ -191,12 +192,14 @@ export const PostSocialArea = ({post}:{post:Post}) => {
             )}
             {error && <p className="text-sm text-red-400 mb-2">{error}</p>}
 
-            {/* Like count */}
-            <p className="text-sm text-gray-400">
-                {likes.length} {likes.length === 1 ? 'like' : 'likes'}
-            </p>
 
+            {/* Like count */}
+                <div className="text-sm text-gray-400 mx-2">
+                    {likes.length} {likes.length === 1 ? 'like' : 'likes'}
+                </div>
+            </div>
             <SocialShareButtons title={post.title} url={`http://localhost:3000/blog/${post._id}`}/>
+
         </div>
 
 
