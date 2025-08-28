@@ -41,36 +41,73 @@ export const Posts = () => {
 
     // Effect for vertical-to-horizontal scroll translation
     useEffect(() => {
-        const handleScroll = () => {
-            const postsContainer = document.getElementById('posts-container');
-            if (!postsContainer) return;
+        let rafId: number | null = null;
+        let running = false;
 
-            // Get the main scrollable container
-            const mainContainer = document.querySelector('main');
-            if (!mainContainer) return;
+        // Animated state
+        let current = 0; // current animated scrollLeft
+        let target = 0;  // target scrollLeft
 
-            // Calculate scroll percentage
-            const scrollPercentage = mainContainer.scrollTop / (mainContainer.scrollHeight - mainContainer.clientHeight);
+        // Tunables
+        const SMOOTHING = 0.2; // 0.08–0.25; higher = snappier
+        const EPSILON = 0.8;    // when to stop animating (px difference)
 
-            // Calculate target scroll position for posts container
-            const targetScrollLeft = scrollPercentage * (postsContainer.scrollWidth - postsContainer.clientWidth);
+        const easeInOutCubic = (t: number) =>
+            t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
-            // Apply horizontal scroll
-            postsContainer.scrollLeft = targetScrollLeft;
-        };
+        const postsContainer = document.getElementById('posts-container') as HTMLDivElement | null;
+        const mainContainer = document.querySelector('main') as HTMLElement | null;
+        if (!postsContainer || !mainContainer) return;
 
-        // Get the main scrollable container
-        const mainContainer = document.querySelector('main');
-        if (mainContainer) {
-            mainContainer.addEventListener('scroll', handleScroll);
-        }
-
-        return () => {
-            if (mainContainer) {
-                mainContainer.removeEventListener('scroll', handleScroll);
+        const animate = () => {
+            const delta = target - current;
+            if (Math.abs(delta) > EPSILON) {
+                // Simple exponential smoothing toward target
+                current += delta * SMOOTHING;
+                postsContainer.scrollLeft = current;
+                rafId = requestAnimationFrame(animate);
+            } else {
+                // Snap to final pixel and stop
+                current = target;
+                postsContainer.scrollLeft = current;
+                running = false;
+                rafId = null;
             }
         };
-    }, [posts]); // Re-attach when posts change
+
+        const start = () => {
+            if (!running) {
+                running = true;
+                rafId = requestAnimationFrame(animate);
+            }
+        };
+
+        const handleScroll = () => {
+            // Calculate eased vertical scroll percentage
+            const maxV = Math.max(1, mainContainer.scrollHeight - mainContainer.clientHeight);
+            const rawPct = Math.min(1, Math.max(0, mainContainer.scrollTop / maxV));
+            const easedPct = easeInOutCubic(rawPct);
+
+            // Map to horizontal
+            const maxH = Math.max(0, postsContainer.scrollWidth - postsContainer.clientWidth);
+            target = easedPct * maxH;
+
+            // Kick the short animation toward the new target
+            start();
+        };
+
+        // Initialize current to whatever the container is at
+        current = postsContainer.scrollLeft || 0;
+        // Do an initial sync so it's smooth from first frame
+        handleScroll();
+
+        mainContainer.addEventListener('scroll', handleScroll, { passive: true });
+
+        return () => {
+            mainContainer.removeEventListener('scroll', handleScroll as EventListener);
+            if (rafId) cancelAnimationFrame(rafId);
+        };
+    }, [posts]);
 
     const fetchPosts = async () => {
         try {
@@ -335,18 +372,20 @@ export const Posts = () => {
             ) : (
                 <div 
                     id="posts-container"
-                    className="flex flex-nowrap gap-6 pb-4 snap-x"
+                    className="flex flex-nowrap gap-6 pb-4 snap-none"
                     style={{ 
                         scrollBehavior: 'smooth',
-                        //scrollSnapType: 'x mandatory',
-                        overflow: 'hidden'
+                        willChange: 'scroll-position',
+                        overscrollBehaviorX: 'contain',
+                        overflow: 'hidden',
+                        scrollSnapType: 'none'
                     }}
                 >
                     {posts.map((post, index) => (
                         <Link 
                             href={`/blog/${post._id}`} 
                             key={post._id} 
-                            className="snap-start flex-shrink-0 min-w-[300px]"
+                            className="flex-shrink-0 min-w-[300px]"
                         >
                             <PostCard post={post}></PostCard>
                         </Link>
