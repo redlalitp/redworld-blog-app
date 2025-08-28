@@ -39,66 +39,40 @@ export const Posts = () => {
         fetchPosts();
     }, []);
 
-    // Effect for vertical-to-horizontal scroll translation
+    // Effect for vertical-to-horizontal scroll translation (immediate feel)
     useEffect(() => {
-        let rafId: number | null = null;
-        let running = false;
-
-        // Animated state
-        let current = 0; // current animated scrollLeft
-        let target = 0;  // target scrollLeft
-
-        // Tunables
-        const SMOOTHING = 0.2; // 0.08–0.25; higher = snappier
-        const EPSILON = 0.8;    // when to stop animating (px difference)
-
-        const easeInOutCubic = (t: number) =>
-            t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-
         const postsContainer = document.getElementById('posts-container') as HTMLDivElement | null;
         const mainContainer = document.querySelector('main') as HTMLElement | null;
         if (!postsContainer || !mainContainer) return;
 
-        const animate = () => {
-            const delta = target - current;
-            if (Math.abs(delta) > EPSILON) {
-                // Simple exponential smoothing toward target
-                current += delta * SMOOTHING;
-                postsContainer.scrollLeft = current;
-                rafId = requestAnimationFrame(animate);
-            } else {
-                // Snap to final pixel and stop
-                current = target;
-                postsContainer.scrollLeft = current;
-                running = false;
-                rafId = null;
-            }
-        };
+        let rafId: number | null = null;
+        let scheduled = false;
+        let latestTarget = 0;
 
-        const start = () => {
-            if (!running) {
-                running = true;
-                rafId = requestAnimationFrame(animate);
-            }
+        const easeInOutCubic = (t: number) =>
+            t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+        const update = () => {
+            postsContainer.scrollLeft = latestTarget;
+            scheduled = false;
+            rafId = null;
         };
 
         const handleScroll = () => {
-            // Calculate eased vertical scroll percentage
             const maxV = Math.max(1, mainContainer.scrollHeight - mainContainer.clientHeight);
             const rawPct = Math.min(1, Math.max(0, mainContainer.scrollTop / maxV));
-            const easedPct = easeInOutCubic(rawPct);
+            const easedPct = easeInOutCubic(rawPct); // optional; remove if you want linear
 
-            // Map to horizontal
             const maxH = Math.max(0, postsContainer.scrollWidth - postsContainer.clientWidth);
-            target = easedPct * maxH;
+            latestTarget = rawPct * maxH;
 
-            // Kick the short animation toward the new target
-            start();
+            if (!scheduled) {
+                scheduled = true;
+                rafId = requestAnimationFrame(update);
+            }
         };
 
-        // Initialize current to whatever the container is at
-        current = postsContainer.scrollLeft || 0;
-        // Do an initial sync so it's smooth from first frame
+        // Initial sync
         handleScroll();
 
         mainContainer.addEventListener('scroll', handleScroll, { passive: true });
