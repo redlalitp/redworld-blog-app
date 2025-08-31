@@ -14,7 +14,7 @@ export default function PostDetail({ post }: { post: Post }) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export async function getServerSideProps (context)  {
     const { id } = context.params;
 
     try {
