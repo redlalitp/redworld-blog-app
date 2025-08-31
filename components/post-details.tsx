@@ -5,6 +5,7 @@ import { CommentsSection } from "./comments-section";
 import { PostSocialArea } from "./post-social-area";
 import {useBackground} from "../lib/background-context";
 import {useEffect} from "react";
+import {formatDDMMYYYY, formatLong, parseDateWithOrdinal} from "../utils/utils";
 
 export const PostDetails = ({ post }: { post: Post }) => {
 
@@ -30,7 +31,7 @@ export const PostDetails = ({ post }: { post: Post }) => {
                 {/* Post Date */}
                 {post.date && (
                     <p className="text-xs text-gray-500 mb-3">
-                        Posted on {new Date(post.date).toLocaleDateString()}
+                        Posted on {formatLong(parseDateWithOrdinal(post.date))}
                     </p>
                 )}
             </div>
