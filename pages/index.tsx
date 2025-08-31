@@ -7,7 +7,7 @@ export default function Home() {
         <div className="sticky top-0 z-10">
           <Nav />
         </div>
-        <main className="max-w-full mx-auto mt-6 px-4 h-[calc(100vh-80px)] overflow-y-auto overscroll-none" style={{ scrollbarWidth: 'none' }}>
+        <main className="max-w-full mx-auto mt-80 px-4 h-[calc(100vh-80px)] overflow-y-auto overscroll-none" style={{ scrollbarWidth: 'none' }}>
           <div className="sticky top-20">
             <Posts />
           </div>

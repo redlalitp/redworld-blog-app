@@ -54,7 +54,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             console.log(`User has admin privileges: ${adminClient}`);
 
             // Extract post data from request body
-            const { title, text } = req.body;
+            const { title, text, date, image } = req.body;
 
             if (!title || !text) {
                 return res.status(400).json({ error: "Title and text are required" });
@@ -65,7 +65,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 title,
                 text,
                 author: session.user.name,
-                date: new Date(),
+                date: date? date : new Date(),
+                image: image? image : "default.png",
             };
 
             // Insert post into database
