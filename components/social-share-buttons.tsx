@@ -23,7 +23,8 @@ export const SocialShareButtons = ({ title, url }: SocialShareButtonsProps) => {
     const [copied, setCopied] = useState(false);
 
     useEffect(() => {
-        setCurrentUrl(url || window.location.href);
+        const locUrl = url || window.location.href;
+        setCurrentUrl(locUrl);
         setCanShare(typeof navigator !== "undefined" && !!navigator.share);
     }, [url]);
 
@@ -52,66 +53,64 @@ export const SocialShareButtons = ({ title, url }: SocialShareButtonsProps) => {
         }
     };
 
+    const links = [
+        {
+            icon: <FaTwitter />,
+            href: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`,
+            color: "hover:text-sky-500",
+            label: "Share on Twitter",
+        },
+        {
+            icon: <FaWhatsapp />,
+            href: `https://api.whatsapp.com/send?text=${encodedTitle}%20${encodedUrl}`,
+            color: "hover:text-green-500",
+            label: "Share on WhatsApp",
+        },
+        {
+            icon: <FaLinkedin />,
+            href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
+            color: "hover:text-blue-600",
+            label: "Share on LinkedIn",
+        },
+        {
+            icon: <FaFacebook />,
+            href: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+            color: "hover:text-blue-700",
+            label: "Share on Facebook",
+        },
+        {
+            icon: <FaReddit />,
+            href: `https://www.reddit.com/submit?url=${encodedUrl}&title=${encodedTitle}`,
+            color: "hover:text-orange-500",
+            label: "Share on Reddit",
+        },
+    ];
+
     return (
-        <div className="flex flex-wrap items-center gap-4 text-gray-400">
-          <span className="flex items-center gap-1 text-sm font-medium text-gray-500">
-            <FaShareAlt /> Share:
-          </span>
+        <div className="flex flex-wrap items-center gap-3 text-gray-400">
+      <span className="flex items-center gap-1 text-sm font-medium text-gray-500">
+        <FaShareAlt /> Share:
+      </span>
 
-            <a
-                href={`https://twitter.com/intent/tweet?text=${encodedTitle}&url=${encodedUrl}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-sky-500 transition"
-                title="Share on Twitter"
-            >
-                <FaTwitter />
-            </a>
-
-            <a
-                href={`https://api.whatsapp.com/send?text=${encodedTitle}%20${encodedUrl}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-green-500 transition"
-                title="Share on WhatsApp"
-            >
-                <FaWhatsapp />
-            </a>
-
-            <a
-                href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodedTitle}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-blue-600 transition"
-                title="Share on LinkedIn"
-            >
-                <FaLinkedin />
-            </a>
-
-            <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-blue-700 transition"
-                title="Share on Facebook"
-            >
-                <FaFacebook />
-            </a>
-
-            <a
-                href={`https://www.reddit.com/submit?url=${encodedUrl}&title=${encodedTitle}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-orange-500 transition"
-                title="Share on Reddit"
-            >
-                <FaReddit />
-            </a>
+            {links.map((link, idx) => (
+                <a
+                    key={idx}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`${link.color} transition`}
+                    title={link.label}
+                    aria-label={link.label}
+                >
+                    {link.icon}
+                </a>
+            ))}
 
             <button
                 onClick={handleCopy}
                 className="hover:text-indigo-400 transition"
                 title="Copy link"
+                aria-label="Copy link"
             >
                 <FaLink />
             </button>
@@ -121,6 +120,7 @@ export const SocialShareButtons = ({ title, url }: SocialShareButtonsProps) => {
                     onClick={handleNativeShare}
                     className="hover:text-pink-500 transition"
                     title="Share on device"
+                    aria-label="Share on device"
                 >
                     <FaMobileAlt />
                 </button>
