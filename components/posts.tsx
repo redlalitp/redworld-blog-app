@@ -1,10 +1,11 @@
 "use client"
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSession } from "next-auth/react";
 import { PostCard } from "./post-card";
 import Link from "next/link";
 import {MdPostAdd} from "react-icons/md";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 
 // Define a type for our post
 export interface Post {
@@ -35,53 +36,41 @@ export const Posts = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formError, setFormError] = useState('');
 
+    // Refs for scroll smoothing
+    const postsRef = useRef<HTMLDivElement | null>(null);
+    const trackRef = useRef<HTMLDivElement | null>(null);
+    const mainRef = useRef<HTMLElement | null>(null);
+
+    // Establish reference to the main scrolling container
+    useEffect(() => {
+        mainRef.current = document.querySelector('main');
+    }, []);
+
+    // Smooth scroll progress from the "main" container
+    const { scrollYProgress } = useScroll({ container: mainRef });
+    const smoothProgress = useSpring(scrollYProgress, { stiffness: 120, damping: 20, mass: 0.3 });
+
+    // Translate horizontal track based on vertical progress
+    const [maxTranslate, setMaxTranslate] = useState(0);
+    useEffect(() => {
+        const measure = () => {
+            if (!postsRef.current || !trackRef.current) return;
+            const max = Math.max(0, trackRef.current.scrollWidth - postsRef.current.clientWidth);
+            setMaxTranslate(max);
+        };
+        measure();
+        window.addEventListener('resize', measure);
+        return () => window.removeEventListener('resize', measure);
+    }, [posts]);
+
+    // Important: derive x from progress with a function so it re-evaluates when maxTranslate changes
+    const x = useTransform(smoothProgress, (p) => -p * maxTranslate);
+
     useEffect(() => {
         fetchPosts();
     }, []);
 
-    // Effect for vertical-to-horizontal scroll translation (immediate feel)
-    useEffect(() => {
-        const postsContainer = document.getElementById('posts-container') as HTMLDivElement | null;
-        const mainContainer = document.querySelector('main') as HTMLElement | null;
-        if (!postsContainer || !mainContainer) return;
-
-        let rafId: number | null = null;
-        let scheduled = false;
-        let latestTarget = 0;
-
-        const easeInOutCubic = (t: number) =>
-            t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-
-        const update = () => {
-            postsContainer.scrollLeft = latestTarget;
-            scheduled = false;
-            rafId = null;
-        };
-
-        const handleScroll = () => {
-            const maxV = Math.max(1, mainContainer.scrollHeight - mainContainer.clientHeight);
-            const rawPct = Math.min(1, Math.max(0, mainContainer.scrollTop / maxV));
-            const easedPct = easeInOutCubic(rawPct); // optional; remove if you want linear
-
-            const maxH = Math.max(0, postsContainer.scrollWidth - postsContainer.clientWidth);
-            latestTarget = rawPct * maxH;
-
-            if (!scheduled) {
-                scheduled = true;
-                rafId = requestAnimationFrame(update);
-            }
-        };
-
-        // Initial sync
-        handleScroll();
-
-        mainContainer.addEventListener('scroll', handleScroll, { passive: true });
-
-        return () => {
-            mainContainer.removeEventListener('scroll', handleScroll as EventListener);
-            if (rafId) cancelAnimationFrame(rafId);
-        };
-    }, [posts]);
+// Removed the old scrollLeft-sync effect. Framer Motion now drives the horizontal transform.
 
     const fetchPosts = async () => {
         try {
@@ -346,24 +335,29 @@ export const Posts = () => {
             ) : (
                 <div 
                     id="posts-container"
-                    className="flex flex-nowrap gap-6 pb-4 snap-none"
+                    ref={postsRef}
+                    className="pb-4 snap-none overflow-hidden"
                     style={{ 
-                        scrollBehavior: 'smooth',
-                        willChange: 'scroll-position',
+                        willChange: 'transform',
                         overscrollBehaviorX: 'contain',
-                        overflow: 'hidden',
                         scrollSnapType: 'none'
                     }}
                 >
-                    {posts.map((post, index) => (
-                        <Link 
-                            href={`/blog/${post._id}`} 
-                            key={post._id} 
-                            className="flex-shrink-0 min-w-[300px]"
-                        >
-                            <PostCard post={post}></PostCard>
-                        </Link>
-                    ))}
+                    <motion.div
+                        ref={trackRef}
+                        className="flex flex-nowrap gap-6"
+                        style={{ x }}
+                    >
+                        {posts.map((post) => (
+                            <Link 
+                                href={`/blog/${post._id}`} 
+                                key={post._id} 
+                                className="flex-shrink-0 min-w-[300px]"
+                            >
+                                <PostCard post={post}></PostCard>
+                            </Link>
+                        ))}
+                    </motion.div>
                 </div>
             )}
         </div>
