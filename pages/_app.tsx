@@ -2,6 +2,7 @@ import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import "../styles/globals.css";
 import {BackgroundProvider, useBackground} from "../lib/background-context";
+import {linearGradient} from "framer-motion/m";
 
 export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
@@ -22,11 +23,11 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
             <div
                 className="min-h-screen transition-all duration-500"
                 style={{
-                    backgroundImage: `url(/images/${background}.jpg)`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundRepeat: 'no-repeat',
-
+                    //backgroundImage: `url(/images/${background}.jpg)`,
+                    //backgroundSize: 'cover',
+                    //backgroundPosition: 'center',
+                    //backgroundRepeat: 'no-repeat',
+                    backgroundColor: '#EFB036',
                 }}
             >
                 {children}
