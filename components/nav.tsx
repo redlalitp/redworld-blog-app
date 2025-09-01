@@ -7,11 +7,12 @@ export const Nav = () => {
     const { data: session } = useSession();
 
     return (
-        <nav className="flex items-center justify-between px-6 py-3 bg-gray-900 shadow-md">
+        <nav className="flex items-center justify-between px-6 py-3 bg-slate-950 shadow-md">
             <Link href="/">
-                <h1 className="text-xl md:text-2xl font-bold text-white">
-                    Pratibimb Manache!!!
+                <h1 className="text-xl md:text-2xl font-bold text-orange-500 font-modak">
+                    प्रतिबिंब मनाचे !
                 </h1>
+                <h4 className="font-mono text-opacity-50">A blog by Lalit Patil.</h4>
             </Link>
 
             {session ? (
