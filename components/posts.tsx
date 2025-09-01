@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { PostCard } from "./post-card";
 import Link from "next/link";
 import {MdPostAdd} from "react-icons/md";
-import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { motion, useScroll, useSpring, useMotionValue } from "framer-motion";
 
 // Define a type for our post
 export interface Post {
@@ -36,10 +36,14 @@ export const Posts = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formError, setFormError] = useState('');
 
-    // Refs for scroll smoothing
+// Refs for scroll smoothing
     const postsRef = useRef<HTMLDivElement | null>(null);
     const trackRef = useRef<HTMLDivElement | null>(null);
     const mainRef = useRef<HTMLElement | null>(null);
+
+    // Motion value for horizontal position (allows both programmatic and drag updates)
+    const x = useMotionValue(0);
+    const isDraggingRef = useRef(false);
 
     // Establish reference to the main scrolling container
     useEffect(() => {
@@ -50,7 +54,7 @@ export const Posts = () => {
     const { scrollYProgress } = useScroll({ container: mainRef });
     const smoothProgress = useSpring(scrollYProgress, { stiffness: 120, damping: 20, mass: 0.3 });
 
-    // Translate horizontal track based on vertical progress
+    // Translate horizontal track based on vertical progress, and allow dragging with constraints
     const [maxTranslate, setMaxTranslate] = useState(0);
     useEffect(() => {
         const measure = () => {
@@ -63,8 +67,14 @@ export const Posts = () => {
         return () => window.removeEventListener('resize', measure);
     }, [posts]);
 
-    // Important: derive x from progress with a function so it re-evaluates when maxTranslate changes
-    const x = useTransform(smoothProgress, (p) => -p * maxTranslate);
+    // Keep x in sync with vertical scroll when not dragging
+    useEffect(() => {
+        const unsubscribe = smoothProgress.on('change', (p) => {
+            if (isDraggingRef.current) return;
+            x.set(-p * maxTranslate);
+        });
+        return () => unsubscribe();
+    }, [smoothProgress, x, maxTranslate]);
 
     useEffect(() => {
         fetchPosts();
@@ -220,7 +230,7 @@ export const Posts = () => {
                     {showPostForm && (
                         <>
                             {/* Backdrop with blur effect */}
-                            <div 
+                            <div
                                 className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
                                 onClick={() => setShowPostForm(false)}
                             ></div>
@@ -231,7 +241,7 @@ export const Posts = () => {
                                     <div className="p-6">
                                         <div className="flex justify-between items-center mb-4">
                                             <h3 className="text-2xl font-bold text-white">📝 Create New Post</h3>
-                                            <button 
+                                            <button
                                                 onClick={() => setShowPostForm(false)}
                                                 className="text-zinc-400 hover:text-white"
                                             >
@@ -346,7 +356,23 @@ export const Posts = () => {
                     <motion.div
                         ref={trackRef}
                         className="flex flex-nowrap gap-6"
-                        style={{ x }}
+                        style={{ x, touchAction: 'pan-y' }}
+                        drag="x"
+                        dragDirectionLock
+                        dragConstraints={{ left: -maxTranslate, right: 0 }}
+                        dragElastic={0.08}
+                        dragMomentum
+                        dragTransition={{ power: 0.25, timeConstant: 250, modifyTarget: (v) => Math.max(-maxTranslate, Math.min(0, v)) }}
+                        onDragStart={() => { isDraggingRef.current = true; }}
+                        onDragEnd={() => {
+                            isDraggingRef.current = false;
+                            // Sync vertical scroll with final horizontal position to avoid snap-back
+                            const main = mainRef.current;
+                            if (!main || maxTranslate === 0) return;
+                            const pct = Math.max(0, Math.min(1, -x.get() / maxTranslate));
+                            const maxV = Math.max(1, main.scrollHeight - main.clientHeight);
+                            main.scrollTo({ top: pct * maxV, behavior: 'smooth' });
+                        }}
                     >
                         {posts.map((post) => (
                             <Link 
