@@ -7,12 +7,12 @@ export const Nav = () => {
     const { data: session } = useSession();
 
     return (
-        <nav className="flex items-center justify-between px-6 py-3 bg-slate-950 shadow-md">
+        <nav className="flex items-center justify-between px-6 py-3 bg-slate-950/30 shadow-md">
             <Link href="/">
-                <h1 className="text-xl md:text-2xl font-bold text-orange-500 font-modak">
-                    प्रतिबिंब मनाचे !
+                <h1 className="text-xl md:text-2xl font-bold text-orange-500">
+                    Home
                 </h1>
-                <h4 className="font-mono text-opacity-50">A blog by Lalit Patil.</h4>
+                {/*<h4 className="font-mono text-opacity-50">A blog by Lalit Patil.</h4>*/}
             </Link>
 
             {session ? (
@@ -38,7 +38,7 @@ export const Nav = () => {
             ) : (
                 <button
                     onClick={() => signIn()}
-                    className="px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                    className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-bold py-3 px-6 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
                 >
                     Sign In
                 </button>
