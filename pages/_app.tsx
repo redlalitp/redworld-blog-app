@@ -27,7 +27,9 @@ export default function App({ Component, pageProps: { session, ...pageProps } }:
                     //backgroundSize: 'cover',
                     //backgroundPosition: 'center',
                     //backgroundRepeat: 'no-repeat',
-                    backgroundColor: '#EFB036',
+                    backgroundImage: "linear-gradient(to bottom, #020617, #064e3b, #0e7490)"
+                    //backgroundImage: "linear-gradient(to bottom, #020617, #1e293b, #312e81)"
+                    //backgroundImage: "linear-gradient(to bottom, #020617, #701a75, #0891b2)"
                 }}
             >
                 {children}
