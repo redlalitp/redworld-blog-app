@@ -1,6 +1,12 @@
+/*@import url('../public/fonts/Modak-Regular.ttf');*/
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.font-modak {
+    font-family: '../public/fonts/Modak-Regular.ttf', serif;
+}
 
 @layer base {
   body {
