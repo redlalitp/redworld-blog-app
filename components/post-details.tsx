@@ -34,9 +34,7 @@ export const PostDetails = ({ post }: { post: Post }) => {
                             date: metadata.DateTimeOriginal || null,
                             location:
                                 metadata.GPSLatitude && metadata.GPSLongitude
-                                    ? `${metadata.GPSLatitude.toFixed(
-                                        5
-                                    )}, ${metadata.GPSLongitude.toFixed(5)}`
+                                    ? `${metadata.GPSLatitude.toFixed(5)}, ${metadata.GPSLongitude.toFixed(5)}`
                                     : null,
                             exposure: metadata.ExposureTime || null,
                             iso: metadata.ISO || null,
@@ -52,20 +50,55 @@ export const PostDetails = ({ post }: { post: Post }) => {
             }
         };
 
-        fetchMeta().then(r => console.log(r));
+        fetchMeta();
 
         return () => setBackground("bk1");
     }, [post, setBackground]);
 
     return (
-        <div className="relative flex h-full w-full">
+        <div className="relative flex h-full w-full overflow-hidden">
             {/* Toggle Button */}
             <button
                 onClick={() => setShowImageOnly((prev) => !prev)}
-                className="absolute top-4 right-4 z-20 bg-black/50 text-gray-200 px-4 py-2 rounded-lg hover:bg-black/70 transition"
+                className="absolute top-4 right-4 z-30 bg-black/50 text-gray-200 px-4 py-2 rounded-lg hover:bg-black/70 transition"
             >
                 {showImageOnly ? "Show Post" : "View Image"}
             </button>
+
+            {/* Background Image Layer */}
+            <motion.div
+                key="background-image"
+                className="absolute inset-0 bg-center bg-no-repeat z-10"
+                style={{
+                    backgroundImage: `url(/images/${post.image}.jpg)`,
+                }}
+                animate={
+                    showImageOnly
+                        ? {
+                            width: "1000px",
+                            height: "600px",
+                            top: "calc(50% - 300px)",
+                            left: "calc(50% - 500px)",
+                            //boxShadow: "0 2rem 3rem #000",
+                            boxShadow: "0px 8px 30px rgba(0,0,0,0.7)",
+                            filter: "brightness(1)",
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            transition: { duration: 0.6, ease: "easeInOut" },
+                        }
+                        : {
+                            width: "100%",
+                            height: "100%",
+                            top: "0%",
+                            left: "0%",
+                            boxShadow: "none",
+                            filter: "brightness(0.4)",
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                        }
+                }
+                transition={{ duration: 0.6, ease: "easeInOut" }}
+            />
 
             <AnimatePresence mode="wait">
                 {!showImageOnly ? (
@@ -75,7 +108,7 @@ export const PostDetails = ({ post }: { post: Post }) => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
                         transition={{ duration: 0.3 }}
-                        className="flex flex-col max-w-3xl h-full overflow-auto bg-[#2b2b2b]/70 backdrop-blur-sm text-gray-200 border border-[#3c3f41] p-6 m-3 rounded-xl shadow-md"
+                        className="relative z-20 flex flex-col max-w-3xl h-80% overflow-auto bg-[#2b2b2b]/70 backdrop-blur-sm text-gray-200 border border-[#3c3f41] p-6 m-3 rounded-xl shadow-md"
                     >
                         {/* Post Title */}
                         <div className="flex flex-col">
@@ -84,8 +117,7 @@ export const PostDetails = ({ post }: { post: Post }) => {
                             </h3>
                             {post.date && (
                                 <p className="text-xs text-gray-500 mb-3">
-                                    Posted on{" "}
-                                    {formatLong(parseDateWithOrdinal(post.date))}
+                                    Posted on {formatLong(parseDateWithOrdinal(post.date))}
                                 </p>
                             )}
                         </div>
@@ -119,71 +151,60 @@ export const PostDetails = ({ post }: { post: Post }) => {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.4 }}
-                        className="flex flex-col justify-end w-full h-full p-6  text-gray-100"
+                        className="relative z-20 flex flex-col justify-end w-full h-full p-6 text-gray-100"
                     >
                         {/* Metadata Overlay */}
-                        <div className="bg-black/60 rounded-lg p-4 max-w-md text-sm space-y-2">
+                        <div className="bg-black/60 rounded-lg p-4 max-w-80 text-sm space-y-2">
                             <p>
                                 <strong>Metadata</strong>
                             </p>
-
                             {imageMeta && (
                                 <>
                                     {imageMeta.camera && (
                                         <p>
-                                            <strong>Camera:</strong>{" "}
-                                            {imageMeta.camera}
+                                            <strong>Camera:</strong> {imageMeta.camera}
                                         </p>
                                     )}
                                     {imageMeta.lens && (
                                         <p>
-                                            <strong>Lens:</strong>{" "}
-                                            {imageMeta.lens.toString()}
+                                            <strong>Lens:</strong> {imageMeta.lens.toString()}
                                         </p>
                                     )}
                                     {imageMeta.resolution && (
                                         <p>
-                                            <strong>Resolution:</strong>{" "}
-                                            {imageMeta.resolution}
+                                            <strong>Resolution:</strong> {imageMeta.resolution}
                                         </p>
                                     )}
                                     {imageMeta.location && (
                                         <p>
-                                            <strong>Location:</strong>{" "}
-                                            {imageMeta.location}
+                                            <strong>Location:</strong> {imageMeta.location}
                                         </p>
                                     )}
                                     {imageMeta.date && (
                                         <p>
-                                            <strong>Taken on:</strong>{" "}
-                                            {imageMeta.date.toLocaleString()}
+                                            <strong>Taken on:</strong> {imageMeta.date.toLocaleString()}
                                         </p>
                                     )}
                                     {imageMeta.iso && (
                                         <p>
-                                            <strong>ISO:</strong>{" "}
-                                            {imageMeta.iso.toString()}
+                                            <strong>ISO:</strong> {imageMeta.iso.toString()}
                                         </p>
                                     )}
                                     {imageMeta.aperture && (
                                         <p>
-                                            <strong>Aperture:</strong>{" "}
-                                            {imageMeta.aperture.toString()}
+                                            <strong>Aperture:</strong> {imageMeta.aperture.toString()}
                                         </p>
                                     )}
                                     {imageMeta.shutterSpeed && (
                                         <p>
-                                            <strong>Shutter Speed:</strong>{" "}
-                                            {imageMeta.shutterSpeed.toString()}
+                                            <strong>Shutter Speed:</strong> {imageMeta.shutterSpeed.toString()}
                                         </p>
                                     )}
                                     {imageMeta.focalLength && (
                                         <p>
-                                            <strong>Focal Length:</strong>{" "}
-                                            {imageMeta.focalLength.toString()}
+                                            <strong>Focal Length:</strong> {imageMeta.focalLength.toString()}
                                         </p>
                                     )}
-
                                 </>
                             )}
                         </div>
