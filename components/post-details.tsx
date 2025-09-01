@@ -7,12 +7,16 @@ import { PostSocialArea } from "./post-social-area";
 import { useBackground } from "../lib/background-context";
 import { formatLong, parseDateWithOrdinal } from "../utils/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import {MapIcon} from "@heroicons/react/24/outline";
 import exifr from "exifr";
+import * as url from "node:url";
+import imageLocationMetaData from "../utils/image-meta.json";
 
 export const PostDetails = ({ post }: { post: Post }) => {
     const { setBackground } = useBackground();
     const [showImageOnly, setShowImageOnly] = useState(false);
     const [imageMeta, setImageMeta] = useState<any>(null);
+    const [imageLocationMeta, setImageLocationMeta] = useState<any>(null);
 
     // Set background and extract metadata
     useEffect(() => {
@@ -22,6 +26,15 @@ export const PostDetails = ({ post }: { post: Post }) => {
             try {
                 if (post.image) {
                     const metadata = await exifr.parse(`../images/${post.image}.jpg`);
+                    const imageMetaData = imageLocationMetaData.find(img => img.id === Number.parseInt(post.image));
+                    console.log(imageMetaData);
+                    if (imageMetaData) {
+                        setImageLocationMeta({
+                           locationText: imageMetaData.location,
+                            mapUrl: imageMetaData.map,
+                        })
+                    }
+
                     if (metadata) {
                         setImageMeta({
                             camera: metadata.Make
@@ -75,10 +88,10 @@ export const PostDetails = ({ post }: { post: Post }) => {
                 animate={
                     showImageOnly
                         ? {
-                            width: "1000px",
-                            height: "600px",
-                            top: "calc(50% - 300px)",
-                            left: "calc(50% - 500px)",
+                            width: "70vw",
+                            height: "70vh",
+                            top: "calc(50% - 35vh)",
+                            left: "calc(50% - 35vw)",
                             //boxShadow: "0 2rem 3rem #000",
                             boxShadow: "0px 8px 30px rgba(0,0,0,0.7)",
                             filter: "brightness(1)",
@@ -153,8 +166,27 @@ export const PostDetails = ({ post }: { post: Post }) => {
                         transition={{ duration: 0.4 }}
                         className="relative z-20 flex flex-col justify-end w-full h-full p-6 text-gray-100"
                     >
+                        {/* location meta*/}
+                        <div className="flex absolute left-1/3 bottom-2 bg-black/70 rounded-lg p-4 max-w-70vw text-md space-y-2">
+                            {imageLocationMeta && (
+                                <>
+                                    {imageLocationMeta.locationText && (
+                                        <span>
+                                            {imageLocationMeta.locationText}
+                                        </span>
+                                    )}
+                                    {imageLocationMeta.mapUrl && (
+                                        <a href={imageLocationMeta.mapUrl} target="_blank" rel="noopener noreferrer"
+                                           className="ml-2 inline-flex items-center">
+                                            <MapIcon className="h-8 w-8"/>
+                                        </a>
+                                    )}
+                                </>
+                            )}
+                        </div>
+
                         {/* Metadata Overlay */}
-                        <div className="bg-black/60 rounded-lg p-4 max-w-80 text-sm space-y-2">
+                        <div className="bg-black/60 rounded-lg p-4 max-w-56 text-sm space-y-2">
                             <p>
                                 <strong>Metadata</strong>
                             </p>

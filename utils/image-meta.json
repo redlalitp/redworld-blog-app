@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "location": "RajGad Fort, Maharashtra, India",
+    "map": "https://maps.app.goo.gl/Pb33qgmCr67v8Px18"
+  },
+  {
+    "id": 2,
+    "location": "South Loop, Chicago, IL, USA",
+    "map": "https://maps.app.goo.gl/tU67t1BcnX6TWKX9A"
+  },
+  {
+    "id": 3,
+    "location": "IKP, Airoli, Navi Mumbai, Maharashtra, India",
+    "map": "https://maps.app.goo.gl/pw9sTbP4DYZeVHFd9"
+  },
+  {
+    "id": 4,
+    "location": "95th floor, Hancock Tower, Chicago, IL, USA",
+    "map": "https://maps.app.goo.gl/HPqkEDy8fFCud9Js7"
+  },
+  {
+    "id": 5,
+    "location": "South Loop, Chicago, IL, USA",
+    "map": "https://maps.app.goo.gl/tU67t1BcnX6TWKX9A"
+  },
+  {
+    "id": 6,
+    "location": "Times Square, Manhatten, New York, USA",
+    "map": "https://maps.app.goo.gl/WkuZt3wQJTMELykD8"
+  },
+  {
+    "id": 7,
+    "location": "Toranmal, Nandurbar, Maharashtra, India",
+    "map": "https://maps.app.goo.gl/i4KuzA7YzZ4zaAyP6"
+  },
+  {
+    "id": 8,
+    "location": "Jalgaon, Maharashtra, India",
+    "map": "https://maps.app.goo.gl/QzVu67r3aKK3APKG6"
+  },
+  {
+    "id": 9,
+    "location": "Warren Dunes State Park, Michigan, USA",
+    "map": "https://maps.app.goo.gl/XC2ymFXe5rg7Tbs99"
+  },
+  {
+    "id": 10,
+    "location": "Harishchandragad, Ahilyanagar, Maharashtra, India",
+    "map": "https://maps.app.goo.gl/pcWu7wX26hVrThhs9"
+  },
+  {
+    "id": 11,
+    "location": "Belle Isle, Detroit, Michigan,USA",
+    "map": "https://maps.app.goo.gl/9g6buwDmqCxRud2Q8"
+  },
+  {
+    "id": 12,
+    "location": "Jalgaon, Maharashtra, India",
+    "map": "https://maps.app.goo.gl/QzVu67r3aKK3APKG6"
+  },
+  {
+    "id": 13,
+    "location": "Toranmal, Nandurbar, Maharashtra, India",
+    "map": "https://maps.app.goo.gl/i4KuzA7YzZ4zaAyP6"
+  },
+  {
+    "id": 14,
+    "location": "Central Park, New York, NY, USA",
+    "map": "https://maps.app.goo.gl/Yiw5E1Sm6jaRrU3P6"
+  },
+  {
+    "id": 15,
+    "location": "Konkan Kada, Harishchandragad, Ahilyanagar, Maharashtra, India",
+    "map": "https://maps.app.goo.gl/PrSjp5FxJpKVQLfy8"
+  },
+  {
+    "id": 16,
+    "location": "South Loop, Chicago, IL, USA",
+    "map": "https://maps.app.goo.gl/tU67t1BcnX6TWKX9A"
+  }
+]
