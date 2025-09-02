@@ -50,8 +50,8 @@ export const PostcardFooter = ({post}:{post:Post}) => {
     };
 
     useEffect(() => {
-        fetchLikesCount();
-        fetchCommentsCount();
+        fetchLikesCount().then(r => console.log(r));
+        fetchCommentsCount().then(r => console.log(r));
     }, [post._id]);
 
 
@@ -60,11 +60,11 @@ export const PostcardFooter = ({post}:{post:Post}) => {
         <div className="mt-4 text-sm text-gray-400">
             {loading && <p>Loading footer...</p>}
             {error && <p className="text-red-400">{error}</p>}
-            {!loading && !error && !likesCount && (
-                <p className="italic text-gray-500">Not likeable, maybe!</p>
-            )}
+            {/*{!loading && !error && !likesCount && (*/}
+            {/*    <p className="italic text-gray-500">Not likeable, maybe!</p>*/}
+            {/*)}*/}
 
-            <div className="flex justify-between items-center px-6 pt-4 pb-2 border-t border-gray-700 mt-4">
+            <div className="flex justify-between items-center px-6 pt-4 pb-2 mt-4">
                 {/* Likes Section */}
                 <div className="flex items-center space-x-2">
                     <AiFillLike className="w-5 h-5 text-pink-600"/>
