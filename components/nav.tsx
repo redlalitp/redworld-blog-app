@@ -10,14 +10,14 @@ export const Nav = () => {
         <nav className="flex items-center justify-end px-6 py-3 bg-slate-950/30 shadow-md">
             <div className="flex items-center space-x-8 pr-5">
                 <Link href="/">
-                    <h1 className="text-xl md:text-2xl font-bold text-orange-500">
+                    <h1 className="text-lg font-medium text-gray-200 hover:text-orange-400 transition">
                         Home
                     </h1>
                     {/*<h4 className="font-mono text-opacity-50">A blog by Lalit Patil.</h4>*/}
                 </Link>
 
                 <Link href="/blog">
-                    <h1 className="text-xl md:text-2xl font-bold text-orange-500">
+                    <h1 className="text-lg font-medium text-gray-200 hover:text-orange-400 transition">
                         Blog
                     </h1>
                     {/*<h4 className="font-mono text-opacity-50">A blog by Lalit Patil.</h4>*/}
