@@ -6,7 +6,7 @@ import {linearGradient} from "framer-motion/m";
 
 export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
-      <div className="h-[100dvh] w-screen max-w-full justify-self-center bg-black/30 backdrop-blur-sm text-gray-200 overscroll-none overflow-hidden">
+      <div className="h-[100dvh] w-screen max-w-full justify-self-center bg-black/30 backdrop-blur-sm text-gray-200">
           <BackgroundProvider>
               <LayoutWrapper>
                 <SessionProvider session={session}>
