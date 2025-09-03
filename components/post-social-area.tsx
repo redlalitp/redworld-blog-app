@@ -126,26 +126,46 @@ export const PostSocialArea = ({post}:{post:Post}) => {
         }
     };
 
+    const handleMobileShare = async () => {
+        const url = `${window.location.origin}/blog/${post._id}`;
+        try {
+            if (navigator.share) {
+                await navigator.share({ title: post.title, url });
+            } else if (navigator.clipboard) {
+                await navigator.clipboard.writeText(url);
+                alert("Link copied!");
+            } else {
+                alert(url);
+            }
+        } catch {
+            // ignore if user cancels
+        }
+    };
+
     return (
-        <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-2">
+        <div className="flex items-center justify-between gap-2 sm:gap-4">
+            <div className="flex items-center gap-2 sm:gap-3">
             {session ? (
                 <form onSubmit={handleSubmitLike}>
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className={`flex items-center space-x-2 px-4 py-2 rounded-md transition
-          ${
-                            userLikedPost
+                        className={`flex items-center gap-1 sm:gap-2 rounded-md transition
+                            ${userLikedPost
                                 ? 'bg-pink-600 hover:bg-pink-700 text-white'
                                 : 'bg-gray-700 hover:bg-gray-600 text-gray-200'
-                        } disabled:opacity-50 disabled:cursor-not-allowed`}
+                            }
+                            disabled:opacity-50 disabled:cursor-not-allowed
+                            px-2 py-1 sm:px-4 sm:py-2
+                        `}
+                        aria-label={userLikedPost ? 'Unlike' : 'Like'}
+                        title={userLikedPost ? 'Unlike' : 'Like'}
                     >
                         {/* Like Icon */}
                         {userLikedPost ? (
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                className="h-5 w-5"
+                                className="h-4 w-4 sm:h-5 sm:w-5"
                                 viewBox="0 0 24 24"
                                 fill="currentColor"
                             >
@@ -154,7 +174,7 @@ export const PostSocialArea = ({post}:{post:Post}) => {
                         ) : (
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                className="h-5 w-5"
+                                className="h-4 w-4 sm:h-5 sm:w-5"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 strokeWidth={1.5}
@@ -168,37 +188,73 @@ export const PostSocialArea = ({post}:{post:Post}) => {
                             </svg>
                         )}
 
-                        <span className="text-sm font-medium">
-          {userLikedPost ? 'Unlike' : 'Like'}
-        </span>
+                        {/* Label hidden on mobile for compactness */}
+                        <span className="hidden sm:inline text-sm font-medium">
+                            {userLikedPost ? 'Unlike' : 'Like'}
+                        </span>
                     </button>
                 </form>
             ) : (
-                <div className="text-sm text-gray-400 flex items-center space-x-2 mb-4">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 text-gray-500"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
+                <>
+                    {/* Minimal signed-out control on mobile: small sign-in icon button */}
+                    <button
+                        onClick={() => signIn()}
+                        className="sm:hidden inline-flex items-center justify-center rounded-md bg-gray-700 hover:bg-gray-600 text-gray-200 px-2 py-1"
+                        aria-label="Sign in to like"
+                        title="Sign in to like"
                     >
-                        <path d="M7.493 18.5c-.425 0-.82-.236-.975-.632..." />
-                    </svg>
-                    <span>Please sign in to like this post</span>
-                </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 12c2.761 0 5-2.239 5-5S14.761 2 12 2 7 4.239 7 7s2.239 5 5 5Zm-9 9a9 9 0 0 1 18 0H3Z" />
+                        </svg>
+                    </button>
+                    {/* Full prompt on tablet/desktop */}
+                    <div className="hidden sm:flex text-sm text-gray-400 items-center gap-2">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5 text-gray-500"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                        >
+                            <path d="M7.493 18.5c-.425 0-.82-.236-.975-.632..." />
+                        </svg>
+                        <button onClick={() => signIn()} className="underline hover:text-gray-300">
+                            Please sign in to like this post
+                        </button>
+                    </div>
+                </>
             )}
 
+            {/* Minimal status on mobile: hide to save space */}
             {loading && (
-                <p className="text-sm text-gray-400 italic mb-2">Loading likes...</p>
+                <p className="hidden sm:block text-sm text-gray-400 italic mb-0">Loading likes...</p>
             )}
-            {error && <p className="text-sm text-red-400 mb-2">{error}</p>}
+            {error && <p className="hidden sm:block text-sm text-red-400 mb-0">{error}</p>}
 
-
-            {/* Like count */}
-                <div className="text-sm text-gray-400 mx-2">
-                    {likes.length} {likes.length === 1 ? 'like' : 'likes'}
+            {/* Like count: compact on mobile */}
+                <div className="text-xs sm:text-sm text-gray-400 mx-1 sm:mx-2">
+                    <span className="sm:hidden">{likes.length}</span>
+                    <span className="hidden sm:inline">
+                        {likes.length} {likes.length === 1 ? 'like' : 'likes'}
+                    </span>
                 </div>
             </div>
-            <SocialShareButtons title={post.title} url={`http://localhost:3000/blog/${post._id}`}/>
+
+            {/* Share: mobile gets a tiny single button; tablet/desktop show full buttons */}
+            <div className="flex items-center">
+                <button
+                    onClick={handleMobileShare}
+                    className="sm:hidden inline-flex items-center justify-center rounded-md bg-gray-700 hover:bg-gray-600 text-gray-200 px-2 py-1"
+                    aria-label="Share"
+                    title="Share"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18 8a3 3 0 1 0-2.816-4H15a3 3 0 0 0 .184 1.02l-7.1 3.55A3 3 0 0 0 6 8a3 3 0 0 0 2.082.57l7.102 3.55A3 3 0 0 0 15 13h.184A3 3 0 1 0 18 8Z" />
+                    </svg>
+                </button>
+                <div className="hidden sm:block">
+                    <SocialShareButtons title={post.title} url={`http://localhost:3000/blog/${post._id}`}/>
+                </div>
+            </div>
 
         </div>
 
