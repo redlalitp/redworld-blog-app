@@ -11,11 +11,11 @@ export function parseDateWithOrdinal(str) {
 
 // Formatters
 export function formatDDMMYYYY(date) {
-    return date.toLocaleDateString("en-GB"); // 18/06/2022
+    return date.toLocaleDateString("en-US"); // 18/06/2022
 }
 
 export function formatLong(date) {
-    return date.toLocaleDateString("en-GB", {
+    return date.toLocaleDateString("en-US", {
         weekday: "long", // Saturday
         day: "numeric",  // 18
         month: "long",   // June
