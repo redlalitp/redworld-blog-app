@@ -73,8 +73,8 @@ export default function Home() {
                         <Link href="/blog" className="hover:text-amber-400 transition">
                             Blog
                         </Link>
-                        <Link href="/work" className="hover:text-amber-400 transition">
-                            Work
+                        <Link href="/about" className="hover:text-amber-400 transition">
+                            About
                         </Link>
                     </motion.nav>
 
