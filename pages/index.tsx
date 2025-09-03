@@ -14,7 +14,9 @@ export default function Home() {
                 className="absolute h-screen w-screen text-white"
                 style={{
                     //backgroundImage: "radial-gradient(circle at bottom right, white 35%, transparent 70%), linear-gradient(to left, #0f172a, #1e293b)"
-                    background: "repeating-linear-gradient(108deg,white 0 20%,#001220 20% 40%,#F7770F 40% 60%)"
+                    //orange
+                    //background: "repeating-linear-gradient(108deg,white 0 20%,#001220 20% 40%,#F7770F 40% 60%)"
+                    background: "repeating-linear-gradient(108deg,white 0 20%,#001220 20% 60%)"
                 }}>
 
             </motion.div>
@@ -39,7 +41,8 @@ export default function Home() {
                     className="text-6xl md:text-7xl font-extrabold tracking-tight"
                 >
                   {/*<span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500">*/}
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-black via-black/70 to-black">
+                  {/*  <span className="bg-clip-text text-transparent bg-gradient-to-r from-black via-black/70 to-black">*/}
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-white/60 to-white">
                     Lalit Patil
                   </span>
                 </motion.h1>
