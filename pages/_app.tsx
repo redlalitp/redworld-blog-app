@@ -3,6 +3,7 @@ import type {AppProps} from "next/app";
 import "../styles/globals.css";
 import {BackgroundProvider, useBackground} from "../lib/background-context";
 import type {ReactNode} from "react";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 // Centralize the container classes for clarity and reuse
 const ROOT_CONTAINER_CLASS =
@@ -15,6 +16,7 @@ export default function App({Component, pageProps: {session, ...pageProps}}: App
                 <LayoutWrapper>
                     <SessionProvider session={session}>
                         <Component {...pageProps} />
+                        <SpeedInsights />
                     </SessionProvider>
                 </LayoutWrapper>
             </BackgroundProvider>
