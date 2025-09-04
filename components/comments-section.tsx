@@ -90,6 +90,11 @@ export const CommentsSection = ({ post }: { post: Post }) => {
 
     return (
         <div>
+            <div className="mt-4 sm:mt-5 text-gray-300">
+                <h4 className="text-lg sm:text-xl font-semibold text-gray-100 border-b border-gray-700 pb-2 mb-3">
+                    Comments ({comments.length})
+                </h4>
+            </div>
             {session ? (
                 <form onSubmit={handleSubmitComment} className="mb-6 bg-[#2f2f2f] border border-[#3c3f41] p-4 rounded-lg shadow">
                     <textarea

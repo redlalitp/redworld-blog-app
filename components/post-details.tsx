@@ -154,12 +154,11 @@ export const PostDetails = ({ post }: { post: Post }) => {
                             <PostSocialArea post={post} />
                         </div>
 
-                        {/* Comments */}
-                        <div className="mt-4 sm:mt-5 text-gray-300">
-                            <h4 className="text-lg sm:text-xl font-semibold text-gray-100 border-b border-gray-700 pb-2 mb-3">
-                                Comments
-                            </h4>
-                        </div>
+                        {/*<div className="mt-4 sm:mt-5 text-gray-300">*/}
+                        {/*    <h4 className="text-lg sm:text-xl font-semibold text-gray-100 border-b border-gray-700 pb-2 mb-3">*/}
+                        {/*        Comments*/}
+                        {/*    </h4>*/}
+                        {/*</div>*/}
                         <div className="grow min-h-0 overflow-auto">
                             <CommentsSection post={post} />
                         </div>
