@@ -64,7 +64,7 @@ export const PostSocialArea = ({post}:{post:Post}) => {
         fetchLikeStatus();
     }, [post._id]);
 
-    const handleSubmitLike = async (e) => {
+    const handleSubmitLike = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         setIsSubmitting(true);

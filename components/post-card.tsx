@@ -1,6 +1,7 @@
 import { PostcardFooter } from "./postcard-footer";
+import { Post } from "./posts";
 
-export const PostCard = ({ post }) => {
+export const PostCard = ( post : Post) => {
     return (
         <div className="group flex flex-col w-[86vw] sm:w-96 h-full rounded-xl overflow-hidden shadow-md bg-gradient-to-t from-zinc-900/90 to-transparent border border-[#3c3f41] transition hover:shadow-xl hover:border-[#4e5254]">
 

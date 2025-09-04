@@ -44,7 +44,7 @@ export const CommentsSection = ({ post }: { post: Post }) => {
         fetchComments();
     }, [post._id]);
 
-    const handleSubmitComment = async (e) => {
+    const handleSubmitComment = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!commentText.trim()) return;
         setIsSubmitting(true);

@@ -100,52 +100,66 @@ export const Posts = () => {
         }
     };
 
-    const handleSubmitPost = async (e) => {
-        e.preventDefault();
+const handleSubmitPost = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
 
-        if (!postTitle.trim() || !postText.trim()) {
-            setFormError('Title and content are required');
-            return;
-        }
+  const title = postTitle.trim();
+  const text = postText.trim();
 
-        setIsSubmitting(true);
-        setFormError('');
+  if (!title || !text) {
+    setFormError('Title and content are required');
+    return;
+  }
 
-        try {
-            const response = await fetch('/api/posts', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    title: postTitle,
-                    text: postText,
-                }),
-            });
+  setIsSubmitting(true);
+  setFormError('');
 
-            const data = await response.json();
-            console.log(data);
+  try {
+    const response = await fetch('/api/posts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title, text }),
+    });
 
-            if (!response.ok) {
-                throw new Error(data.error || 'Failed to create post');
-            }
+    // Try to parse JSON, but don’t let it mask HTTP status
+    let data: any = null;
+    const contentType = response.headers.get('content-type') || '';
+    if (contentType.includes('application/json')) {
+      try {
+        data = await response.json();
+      } catch {
+        // ignore JSON parse errors, handle by status below
+      }
+    }
 
-            // Clear the form
-            setPostTitle('');
-            setPostText('');
-            setShowPostForm(false);
+    if (!response.ok) {
+      const message =
+        response.status === 401
+          ? 'You must be signed in to create a post.'
+          : response.status === 403
+          ? 'Only admins can create posts.'
+          : (data && (data.error || data.message)) || 'Failed to create post';
+      throw new Error(message);
+    }
 
-            // Refresh posts
-            await fetchPosts();
-        } catch (err) {
-            console.error('Error creating post:', err);
-            setFormError(err.message || 'Failed to create post. Please try again.');
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
+    // Clear the form
+    setPostTitle('');
+    setPostText('');
+    setShowPostForm(false);
 
-    const fetchPostLikesCount = async (post) => {
+    // Refresh posts
+    await fetchPosts();
+  } catch (err: unknown) {
+    console.error('Error creating post:', err);
+    const message =
+      err instanceof Error ? err.message : 'Failed to create post. Please try again.';
+    setFormError(message);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
+    const fetchPostLikesCount = async (post : Post) => {
         try {
             const response = await fetch(`/api/likes/count?postId=${post._id}`);
 
@@ -164,7 +178,7 @@ export const Posts = () => {
     };
 
     // Text markup functions
-    const insertMarkup = (markupType) => {
+    const insertMarkup = (markupType: string) => {
         const textarea = document.getElementById('post-text') as HTMLTextAreaElement;
         if (!textarea) return;
 
@@ -214,10 +228,11 @@ export const Posts = () => {
         return <div className="text-center p-4 text-red-500">{error}</div>;
     }
 
+    // @ts-ignore
     return (
         <div className="space-y-6">
 
-            {session && session.user.role === 'admin' ? (
+            {session && session.user !== undefined && session.user.role === 'admin' ? (
                 <>
                     <button
                         onClick={() => setShowPostForm(true)}
@@ -374,13 +389,13 @@ export const Posts = () => {
                             main.scrollTo({ top: pct * maxV, behavior: 'smooth' });
                         }}
                     >
-                        {posts.map((post) => (
+                        {posts.map((post: Post) => (
                             <Link 
                                 href={`/blog/${post._id}`} 
                                 key={post._id} 
                                 className="flex-shrink-0 min-w-[300px]"
                             >
-                                <PostCard post={post}></PostCard>
+                                <PostCard {...post}></PostCard>
                             </Link>
                         ))}
                     </motion.div>
