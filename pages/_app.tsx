@@ -31,7 +31,7 @@ function LayoutWrapper({children}: { children: ReactNode }) {
     const {background} = useBackground();
     return (
         <div
-            className="h-full w-full overflow-hidden transition-all duration-500"
+            className="h-full w-full transition-all duration-500 overflow-y-auto"
             style={{
                 //backgroundImage: `url(/images/${background}.jpg)`,
                 //backgroundSize: 'cover',
