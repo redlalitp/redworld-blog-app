@@ -1,12 +1,20 @@
 import { Nav } from "../components/nav";
 import { motion } from "framer-motion";
+import { useCallback } from "react";
 import {FaLinkedin} from "react-icons/fa";
 import {HiDownload} from "react-icons/hi";
 import { FcPhoneAndroid } from "react-icons/fc";
 import { MdEmail } from "react-icons/md";
-import html2pdf from 'html2pdf.js';
+
+export function useHtml2Pdf() {
+  return useCallback(async (el: HTMLElement) => {
+    const { default: html2pdf } = await import("html2pdf.js");
+    await html2pdf().from(el).save();
+  }, []);
+}
 
 export default function About() {
+    const handlePdf = useHtml2Pdf();
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-gray-100">
             <Nav />
@@ -39,7 +47,7 @@ export default function About() {
                                 <button
                                     onClick={() => {
                                         const element = document.body;
-                                        html2pdf().from(element).save('lalit-patil-resume.pdf');
+                                        handlePdf(element);
                                     }}
                                     className="inline-flex items-center justify-center p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors"
                                 >
