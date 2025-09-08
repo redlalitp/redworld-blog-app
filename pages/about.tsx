@@ -1,7 +1,7 @@
 import { Nav } from "../components/nav";
 import { motion } from "framer-motion";
 import { useCallback } from "react";
-import {FaLinkedin} from "react-icons/fa";
+import {FaGithub, FaLinkedin} from "react-icons/fa";
 import {HiDownload} from "react-icons/hi";
 import { FcPhoneAndroid } from "react-icons/fc";
 import { MdEmail } from "react-icons/md";
@@ -25,7 +25,7 @@ export default function About() {
                     initial={{ opacity: 0, y: 24 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
-                    className="rounded-2xl bg-gray-900/60 backdrop-blur-lg p-8 shadow-lg border border-gray-800 mb-10"
+                    className="rounded-2xl bg-gray-900/60 backdrop-blur-lg p-8 shadow-lg border border-gray-800 mb-4"
                 >
                     <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
                         <div className="flex flex-gap-4 items-center">
@@ -37,12 +37,20 @@ export default function About() {
                             </div>
                             <div className="mt-4 flex space-x-4 ml-4">
                                 <a
-                                    href="https://www.linkedin.com/in/lalitpatil"
+                                    href="https://www.linkedin.com/in/lalitrpatil"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="inline-flex items-center justify-center p-2 rounded-full bg-blue-600 hover:bg-blue-700 transition-colors"
                                 >
                                     <FaLinkedin className="w-6 h-6"/>
+                                </a>
+                                <a
+                                    href="https://www.github.com/redlalitp"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center justify-center p-2 rounded-full bg-black hover:bg-gray-800 transition-colors"
+                                >
+                                    <FaGithub className="w-6 h-6"/>
                                 </a>
                                 <button
                                     onClick={() => {
@@ -63,9 +71,9 @@ export default function About() {
                 </motion.section>
 
                 {/* Two-column layout */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                     {/* Left Column */}
-                    <div className="space-y-8">
+                    <div className="space-y-4">
                         {/* Summary */}
                         <motion.section
                             initial={{ opacity: 0, y: 24 }}
@@ -81,7 +89,7 @@ export default function About() {
                             </p>
                         </motion.section>
 
-                        {/* Skills with existing look-and-feel for bars */}
+                        {/* Skills with two columns and level bars */}
                         <motion.section
                             initial={{ opacity: 0, y: 24 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -92,57 +100,76 @@ export default function About() {
                                 Skills
                             </h2>
 
-                            <div className="grid sm:grid-cols-2 gap-6">
-                                <div className="space-y-4">
-                                    {[
-                                        { skill: "Java", percent: 90 },
-                                        { skill: "Spring MVC / Spring Boot", percent: 88 },
-                                        { skill: "Node.js", percent: 80 },
-                                        { skill: "JavaScript", percent: 85 },
-                                        { skill: "Ember.js / jQuery / JSP/JSTL", percent: 70 },
-                                    ].map(({ skill, percent }) => (
-                                        <div key={skill}>
-                                            <div className="flex justify-between mb-1">
-                                                <span className="font-medium">{skill}</span>
-                                                <span className="text-gray-400">{percent}%</span>
-                                            </div>
-                                            <div className="w-full bg-gray-800 rounded-full h-3">
-                                                <motion.div
-                                                    initial={{ width: 0 }}
-                                                    animate={{ width: `${percent}%` }}
-                                                    transition={{ duration: 1 }}
-                                                    className="h-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-600"
-                                                />
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
+                            {(() => {
+                                type Level = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 
-                                <div className="space-y-4">
-                                    {[
-                                        { skill: "MySQL / MariaDB", percent: 82 },
-                                        { skill: "NoSQL (MongoDB)", percent: 78 },
-                                        { skill: "CI/CD", percent: 75 },
-                                        { skill: "Jenkins", percent: 72 },
-                                        { skill: "Git", percent: 85 },
-                                    ].map(({ skill, percent }) => (
-                                        <div key={skill}>
-                                            <div className="flex justify-between mb-1">
-                                                <span className="font-medium">{skill}</span>
-                                                <span className="text-gray-400">{percent}%</span>
-                                            </div>
-                                            <div className="w-full bg-gray-800 rounded-full h-3">
-                                                <motion.div
-                                                    initial={{ width: 0 }}
-                                                    animate={{ width: `${percent}%` }}
-                                                    transition={{ duration: 1 }}
-                                                    className="h-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-600"
+                                const renderSkill = (name: string, level: Level, palette: string[]) => (
+                                    <div key={name} className="mb-3">
+                                        <div className="flex justify-between mb-1">
+                                            <span className="font-medium">{name}</span>
+                                            <span className="text-gray-400 text-sm">{level}/10</span>
+                                        </div>
+                                        <div className="flex gap-1">
+                                            {Array.from({ length: 10 }).map((_, i) => (
+                                                <div
+                                                    key={i}
+                                                    className={`h-2 flex-1 rounded ${i < level ? palette[i] : "bg-gray-800"}`}
                                                 />
+                                            ))}
+                                        </div>
+                                    </div>
+                                );
+
+                                const backend = [
+                                    { name: "Java", level: 9 as Level },
+                                    { name: "Spring/Boot", level: 9 as Level },
+                                    { name: "Spring MVC", level: 8 as Level },
+                                    { name: "Spring Security", level: 7 as Level },
+                                    { name: "Hibernate", level: 7 as Level },
+                                    { name: "Node.js", level: 7 as Level },
+                                ];
+
+                                const frontend = [
+                                    { name: "Javascript", level: 9 as Level },
+                                    { name: "Ember.js", level: 7 as Level },
+                                    { name: "NextJS", level: 7 as Level },
+                                    { name: "jquery", level: 6 as Level },
+                                    { name: "qunit", level: 4 as Level },
+                                ];
+
+                                const tools = [
+                                    { name: "Jenkins", level: 6 as Level },
+                                    { name: "Git (GitHub)", level: 9 as Level },
+                                ];
+
+                                const palettes = {
+                                    backend: ["bg-blue-100","bg-blue-200","bg-blue-300","bg-blue-400","bg-blue-500","bg-blue-600","bg-blue-700","bg-blue-800","bg-blue-900","bg-blue-950"],
+                                    frontend: ["bg-purple-100","bg-purple-200","bg-purple-300","bg-purple-400","bg-purple-500","bg-purple-600","bg-purple-700","bg-purple-800","bg-purple-900","bg-purple-950"],
+                                    tools: ["bg-indigo-100","bg-indigo-200","bg-indigo-300","bg-indigo-400","bg-indigo-500","bg-indigo-600","bg-indigo-700","bg-indigo-800","bg-indigo-900","bg-indigo-950"],
+                                };
+
+                                return (
+                                    <div className="grid md:grid-cols-2 gap-8">
+                                        {/* Column 1: Backend */}
+                                        <div>
+                                            <h3 className="mb-4 font-semibold text-blue-300">Backend</h3>
+                                            {backend.map((s) => renderSkill(s.name, s.level, palettes.backend))}
+                                        </div>
+
+                                        {/* Column 2: Frontend + Tools */}
+                                        <div className="space-y-8">
+                                            <div>
+                                                <h3 className="mb-4 font-semibold text-purple-300">Frontend</h3>
+                                                {frontend.map((s) => renderSkill(s.name, s.level, palettes.frontend))}
+                                            </div>
+                                            <div>
+                                                <h3 className="mb-4 font-semibold text-indigo-300">Tools</h3>
+                                                {tools.map((s) => renderSkill(s.name, s.level, palettes.tools))}
                                             </div>
                                         </div>
-                                    ))}
-                                </div>
-                            </div>
+                                    </div>
+                                );
+                            })()}
                         </motion.section>
 
                         {/* Education */}
