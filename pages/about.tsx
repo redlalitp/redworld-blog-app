@@ -1,5 +1,5 @@
 import { Nav } from "../components/nav";
-import { motion } from "framer-motion";
+import {motion, SVGMotionProps} from "framer-motion";
 import { useCallback } from "react";
 import {FaGithub, FaLinkedin} from "react-icons/fa";
 import {HiDownload} from "react-icons/hi";
@@ -35,6 +35,109 @@ export default function About() {
                                 </h1>
                                 <p className="mt-1 text-lg text-gray-300">Full Stack Developer</p>
                             </div>
+                            {/*<div className="absolute top-2 left-5 w-64 h-64">*/}
+                            {/*    <svg viewBox="-1 -1 2 2" style={{transform: 'rotate(-90deg)'}}>*/}
+                            {/*        /!* Background rings *!/*/}
+                            {/*        {[0.2, 0.4, 0.6, 0.8, 1].map((r, i) => (*/}
+                            {/*            <motion.circle*/}
+                            {/*                key={i}*/}
+                            {/*                cx={0}*/}
+                            {/*                cy={0}*/}
+                            {/*                r={r}*/}
+                            {/*                fill="none"*/}
+                            {/*                stroke="rgba(255,255,255,0.1)"*/}
+                            {/*                strokeWidth={0.01}*/}
+                            {/*            />*/}
+                            {/*        ))}*/}
+                            {/*        {(() => {*/}
+                            {/*            const points = [*/}
+                            {/*                {angle: 0, value: 0.8, label: 'Backend'},*/}
+                            {/*                {angle: 72, value: 0.6, label: 'Frontend'},*/}
+                            {/*                {angle: 144, value: 0.7, label: 'Distributed Systems'},*/}
+                            {/*                {angle: 216, value: 0.7, label: 'Experience'},*/}
+                            {/*                {angle: 288, value: 0.8, label: 'Education'},*/}
+                            {/*            ];*/}
+                            {/*            const toXY = (deg: number, v: number) => {*/}
+                            {/*                const a = (deg * Math.PI) / 180;*/}
+                            {/*                return { x: Math.cos(a) * v, y: Math.sin(a) * v };*/}
+                            {/*            };*/}
+                            {/*            const coords = points.map(p => ({ ...p, ...toXY(p.angle, p.value) }));*/}
+                            {/*            const pathD = `M ${coords.map(p => `${p.x} ${p.y}`).join(' L ')} Z`;*/}
+
+                            {/*            return (*/}
+                            {/*                <>*/}
+                            {/*                    /!* Spokes *!/*/}
+                            {/*                    {coords.map((p, i) => (*/}
+                            {/*                        <line*/}
+                            {/*                            key={`spoke-${i}`}*/}
+                            {/*                            x1={0}*/}
+                            {/*                            y1={0}*/}
+                            {/*                            x2={Math.cos((points[i].angle * Math.PI) / 180)}*/}
+                            {/*                            y2={Math.sin((points[i].angle * Math.PI) / 180)}*/}
+                            {/*                            stroke="rgba(255,255,255,0.08)"*/}
+                            {/*                            strokeWidth={0.01}*/}
+                            {/*                        />*/}
+                            {/*                    ))}*/}
+
+                            {/*                    /!* Radar shape scaling from center *!/*/}
+                            {/*                    <motion.g*/}
+                            {/*                        initial={{ scale: 0 }}*/}
+                            {/*                        animate={{ scale: 1 }}*/}
+                            {/*                        transition={{ duration: 0.8, ease: 'easeOut' }}*/}
+                            {/*                        style={{ transformOrigin: '50% 50%' }}*/}
+                            {/*                    >*/}
+                            {/*                        <motion.path*/}
+                            {/*                            d={pathD}*/}
+                            {/*                            fill="rgba(99,102,241,0.25)"*/}
+                            {/*                            stroke="rgba(99,102,241,0.85)"*/}
+                            {/*                            strokeWidth={0.03}*/}
+                            {/*                        />*/}
+                            {/*                        /!* Points *!/*/}
+                            {/*                        {coords.map((p, i) => (*/}
+                            {/*                            <motion.circle*/}
+                            {/*                                key={`pt-${i}`}*/}
+                            {/*                                initial={{ scale: 0 }}*/}
+                            {/*                                animate={{ scale: 1 }}*/}
+                            {/*                                transition={{ duration: 0.5, delay: 0.15 + i * 0.05 }}*/}
+                            {/*                                cx={p.x}*/}
+                            {/*                                cy={p.y}*/}
+                            {/*                                r={0.05}*/}
+                            {/*                                fill="rgb(99,102,241)"*/}
+                            {/*                            />*/}
+                            {/*                        ))}*/}
+                            {/*                    </motion.g>*/}
+
+                            {/*                    /!* Labels (counter-rotated to stay readable) *!/*/}
+                            {/*                    {coords.map((p, i) => {*/}
+                            {/*                        const rLabel = Math.min(1.05, p.value + 0.2);*/}
+                            {/*                        const lx = Math.cos((p.angle * Math.PI) / 180) * rLabel;*/}
+                            {/*                        const ly = Math.sin((p.angle * Math.PI) / 180) * rLabel;*/}
+                            {/*                        const anchor =*/}
+                            {/*                            Math.abs(lx) < 0.01 ? 'middle' : lx > 0 ? 'start' : 'end';*/}
+                            {/*                        return (*/}
+                            {/*                            <motion.text*/}
+                            {/*                                key={`lbl-${i}`}*/}
+                            {/*                                x={lx}*/}
+                            {/*                                y={ly}*/}
+                            {/*                                fill="rgba(255,255,255,0.85)"*/}
+                            {/*                                fontSize={0.12}*/}
+                            {/*                                textAnchor={anchor}*/}
+                            {/*                                dominantBaseline="middle"*/}
+                            {/*                                transform={`rotate(90 ${lx} ${ly})`}*/}
+                            {/*                                initial={{ opacity: 0 }}*/}
+                            {/*                                animate={{ opacity: 1 }}*/}
+                            {/*                                transition={{ delay: 0.25 + i * 0.05 }}*/}
+                            {/*                                style={{ pointerEvents: 'none' }}*/}
+                            {/*                            >*/}
+                            {/*                                {p.label}*/}
+                            {/*                            </motion.text>*/}
+                            {/*                        );*/}
+                            {/*                    })}*/}
+                            {/*                </>*/}
+                            {/*            );*/}
+                            {/*        })()}*/}
+                            {/*    </svg>*/}
+                            {/*</div>*/}
                             <div className="mt-4 flex space-x-4 ml-4">
                                 <a
                                     href="https://www.linkedin.com/in/lalitrpatil"
@@ -54,8 +157,8 @@ export default function About() {
                                 </a>
                                 <button
                                     onClick={() => {
-                                        const element = document.body;
-                                        handlePdf(element);
+                                        const element = document.querySelector(".container") as HTMLElement;
+                                        handlePdf(element).then(r => console.log('PDF saved!'));
                                     }}
                                     className="inline-flex items-center justify-center p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors"
                                 >
