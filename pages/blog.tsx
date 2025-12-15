@@ -8,7 +8,7 @@ const PostsClient = dynamic(() => import("../components/posts").then(m => m.Post
 
 export default function Blog() {
   return (
-      <div className="min-h-screen text-gray-200">
+      <div className="min-h-screen text-gray-200 overflow-hidden scrollbar-hide">
         <div className="sticky top-0 z-10">
           <Nav />
         </div>
