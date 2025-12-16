@@ -143,7 +143,7 @@ export const PostDetails = ({ post }: { post: Post }) => {
                         </div>
 
                         {/* Post Body */}
-                        <div className="basis-2/3 min-h-0 overflow-auto p-2 rounded">
+                        <div className="modern-scrollbar basis-2/3 min-h-0 overflow-auto p-2 rounded">
                             <p className="text-sm sm:text-base leading-relaxed text-gray-300 whitespace-pre-wrap">
                                 {post.text}
                             </p>
@@ -154,12 +154,7 @@ export const PostDetails = ({ post }: { post: Post }) => {
                             <PostSocialArea post={post} />
                         </div>
 
-                        {/*<div className="mt-4 sm:mt-5 text-gray-300">*/}
-                        {/*    <h4 className="text-lg sm:text-xl font-semibold text-gray-100 border-b border-gray-700 pb-2 mb-3">*/}
-                        {/*        Comments*/}
-                        {/*    </h4>*/}
-                        {/*</div>*/}
-                        <div className="grow min-h-0 overflow-auto">
+                        <div className="modern-scrollbar grow min-h-0 overflow-auto">
                             <CommentsSection post={post} />
                         </div>
                     </motion.div>
