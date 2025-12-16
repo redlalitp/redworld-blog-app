@@ -106,7 +106,7 @@ export default function Home() {
             aria-label="Social links"
           >
             <a
-              href="https://facebook.com/"
+              href="https://facebook.com/redlalitp"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-blue-600 transition"
@@ -115,7 +115,7 @@ export default function Home() {
               <FaFacebookF />
             </a>
             <a
-              href="https://linkedin.com/"
+              href="https://linkedin.com/in/lalitrpatil/"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-blue-500 transition"
@@ -124,7 +124,7 @@ export default function Home() {
               <FaLinkedinIn />
             </a>
             <a
-              href="https://instagram.com/"
+              href="https://instagram.com/redlalitp"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-pink-500 transition"
