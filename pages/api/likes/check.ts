@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const session = await getServerSession(req, res, authOptions);
     console.log("session:", session);
     if (!session?.user?.email) {
-        return res.status(401).json({ liked: false });
+        return;
     }
 
     const { postId } = req.query;
