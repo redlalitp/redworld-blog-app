@@ -23,7 +23,7 @@ export const SocialShareButtons = ({ title, url }: SocialShareButtonsProps) => {
     const [copied, setCopied] = useState(false);
 
     useEffect(() => {
-        const locUrl = url || window.location.href;
+        const locUrl = window.location.href;
         setCurrentUrl(locUrl);
         setCanShare(typeof navigator !== "undefined" && !!navigator.share);
     }, [url]);
