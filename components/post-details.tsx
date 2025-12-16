@@ -9,7 +9,7 @@ import { PostSocialArea } from "./post-social-area";
 import { useBackground } from "../lib/background-context";
 import { formatLong, parseDateWithOrdinal } from "../utils/utils";
 import { motion, AnimatePresence } from "framer-motion";
-import {MapIcon} from "@heroicons/react/24/outline";
+import { MapIcon } from "@heroicons/react/24/outline";
 import exifr from "exifr";
 import imageLocationMetaData from "../utils/image-meta.json";
 
@@ -52,11 +52,7 @@ export const PostDetails = ({ post }: { post: Post }) => {
 
         const data = await res.json();
 
-        const posts: Post[] = Array.isArray(data)
-          ? data
-          : Array.isArray(data?.posts)
-            ? data.posts
-            : [];
+        const posts: Post[] = Array.isArray(data) ? data : Array.isArray(data?.posts) ? data.posts : [];
 
         if (!cancelled) setAllPosts(posts);
       } catch {
@@ -79,9 +75,7 @@ export const PostDetails = ({ post }: { post: Post }) => {
       try {
         if (post.image) {
           const metadata = await exifr.parse(`../images/${post.image}.jpg`);
-          const imageMetaData = imageLocationMetaData.find(
-            (img) => img.id === Number.parseInt(post.image),
-          );
+          const imageMetaData = imageLocationMetaData.find((img) => img.id === Number.parseInt(post.image));
           console.log(imageMetaData);
           if (imageMetaData) {
             setImageLocationMeta({
@@ -93,15 +87,10 @@ export const PostDetails = ({ post }: { post: Post }) => {
           if (metadata) {
             setImageMeta({
               camera: metadata.Make ? `${metadata.Make} ${metadata.Model || ""}` : metadata.Model || "Unknown",
-              resolution:
-                metadata.ImageWidth && metadata.ImageHeight
-                  ? `${metadata.ImageWidth} × ${metadata.ImageHeight}`
-                  : null,
+              resolution: metadata.ImageWidth && metadata.ImageHeight ? `${metadata.ImageWidth} × ${metadata.ImageHeight}` : null,
               date: metadata.DateTimeOriginal || null,
               location:
-                metadata.GPSLatitude && metadata.GPSLongitude
-                  ? `${metadata.GPSLatitude.toFixed(5)}, ${metadata.GPSLongitude.toFixed(5)}`
-                  : null,
+                metadata.GPSLatitude && metadata.GPSLongitude ? `${metadata.GPSLatitude.toFixed(5)}, ${metadata.GPSLongitude.toFixed(5)}` : null,
               exposure: metadata.ExposureTime || null,
               iso: metadata.ISO || null,
               focalLength: metadata.FocalLength || null,
@@ -126,7 +115,7 @@ export const PostDetails = ({ post }: { post: Post }) => {
       {/* Toggle Button */}
       <button
         onClick={() => setShowImageOnly((prev) => !prev)}
-        className="absolute top-3 right-3 z-30 bg-black/50 text-gray-200 rounded-lg hover:bg-black/70 transition px-3 py-1.5 text-xs sm:text-sm sm:top-4 sm:right-4"
+        className="absolute top-3 right-3 z-30 bg-black/50 text-gray-200 rounded-lg hover:bg-black/70 transition px-3 py-2 text-xs sm:text-sm sm:top-4 sm:right-4"
       >
         {showImageOnly ? "Show Post" : "View Image"}
       </button>
@@ -177,8 +166,8 @@ export const PostDetails = ({ post }: { post: Post }) => {
               relative z-20
               flex flex-col min-[1200px]:flex-row
               w-[92vw] sm:w-[90vw] md:w-[80vw] max-w-3xl min-[1200px]:max-w-[1100px]
-              lg:h-[90vh] sm:h-[82vh]
-              overflow-hidden
+              h-[92dvh] sm:h-[82vh] lg:h-[90vh]
+              overflow-auto sm:overflow-hidden
               bg-[#2b2b2b]/70 backdrop-blur-sm text-gray-200
               border border-[#3c3f41]
               p-4 sm:p-6
@@ -186,33 +175,44 @@ export const PostDetails = ({ post }: { post: Post }) => {
             "
           >
             {/* Main Post Content */}
-            <div className="flex min-w-0 flex-1 flex-col">
+            <div className="flex min-w-0 flex-1 flex-col gap-3 sm:gap-4">
               {/* Post Title */}
               <div className="flex flex-col">
-                <h3 className="text-xl sm:text-2xl font-semibold text-gray-100 mb-1 tracking-tight">
+                <h3 className="text-xl sm:text-2xl font-semibold text-gray-100 mb-1 tracking-tight leading-snug">
                   {post.title}
                 </h3>
                 {post.date && (
-                  <p className="text-[11px] sm:text-xs text-gray-400 sm:text-gray-500 mb-3">
+                  <p className="text-[11px] sm:text-xs text-gray-400 sm:text-gray-500 mb-2 sm:mb-3">
                     Posted on {formatLong(parseDateWithOrdinal(post.date))}
                   </p>
                 )}
               </div>
 
               {/* Post Body */}
-              <div className="modern-scrollbar basis-2/3 min-h-0 overflow-auto p-2 rounded">
-                <p className="text-sm sm:text-base leading-relaxed text-gray-300 whitespace-pre-wrap">
+              <div className="modern-scrollbar basis-2/3 min-h-0 overflow-auto px-1 py-2 sm:p-2 rounded">
+                <p className="text-sm sm:text-base leading-relaxed sm:leading-relaxed text-gray-300 whitespace-pre-wrap">
                   {post.text}
                 </p>
               </div>
 
               {/* Social Area */}
-              <div className="mt-4 sm:mt-6 bg-[#2b2b2b]/50 p-2 sm:p-3 rounded">
+              <div className="bg-[#2b2b2b]/50 p-2 sm:p-3 rounded">
                 <PostSocialArea post={post} />
               </div>
 
               <div className="modern-scrollbar grow min-h-0 overflow-auto">
                 <CommentsSection post={post} />
+              </div>
+
+              {/* Mobile-only navigation helper (does not affect sm/md/lg+) */}
+              <div className="sm:hidden pt-1">
+                <button
+                  type="button"
+                  onClick={() => router.push("/blog")}
+                  className="w-full rounded-lg bg-black/30 border border-white/10 px-3 py-2 text-sm text-gray-200 hover:bg-black/40 transition"
+                >
+                  Back to all posts
+                </button>
               </div>
             </div>
 
@@ -258,9 +258,7 @@ export const PostDetails = ({ post }: { post: Post }) => {
                               aria-hidden="true"
                             />
                             <div className="min-w-0">
-                              <p className="truncate text-sm text-gray-200 group-hover:text-white">
-                                {p?.title ?? "Untitled"}
-                              </p>
+                              <p className="truncate text-sm text-gray-200 group-hover:text-white">{p?.title ?? "Untitled"}</p>
                             </div>
                           </Link>
                         </li>
@@ -278,81 +276,84 @@ export const PostDetails = ({ post }: { post: Post }) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="relative z-20 flex flex-col justify-end w-full h-full p-3 sm:p-6 text-gray-100"
+            className="relative z-20 flex flex-col w-full h-full p-3 sm:p-6 text-gray-100"
           >
-            {/* location meta*/}
-            <div className="absolute left-1/2 -translate-x-1/2 bottom-3 sm:bottom-4 bg-black/70 rounded-md sm:rounded-lg px-3 py-2 sm:p-4 max-w-[90vw] sm:max-w-[70vw] text-xs sm:text-sm flex items-center gap-2">
-              {imageLocationMeta && (
-                <>
-                  {imageLocationMeta.locationText && <span className="truncate">{imageLocationMeta.locationText}</span>}
-                  {imageLocationMeta.mapUrl && (
-                    <a
-                      href={imageLocationMeta.mapUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="ml-1 inline-flex items-center"
-                      aria-label="Open location"
-                      title="Open location"
-                    >
-                      <MapIcon className="h-5 w-5 sm:h-6 sm:w-6" />
-                    </a>
+            {/* Bottom overlays wrapper: stacks on mobile so nothing overlaps */}
+            <div className="absolute inset-x-0 bottom-0 z-20 p-3 sm:p-6">
+              <div className="mx-auto max-w-[92vw] sm:max-w-none flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                {/* Metadata Overlay */}
+                <div className="bg-black/60 rounded-md sm:rounded-lg p-3 sm:p-4 max-w-full sm:max-w-56 text-xs sm:text-sm space-y-1.5 sm:space-y-2">
+                  <p className="font-semibold">Metadata</p>
+                  {imageMeta && (
+                    <>
+                      {imageMeta.camera && (
+                        <p>
+                          <strong>Camera:</strong> {imageMeta.camera}
+                        </p>
+                      )}
+                      {imageMeta.lens && (
+                        <p>
+                          <strong>Lens:</strong> {imageMeta.lens.toString()}
+                        </p>
+                      )}
+                      {imageMeta.resolution && (
+                        <p>
+                          <strong>Resolution:</strong> {imageMeta.resolution}
+                        </p>
+                      )}
+                      {imageMeta.location && (
+                        <p>
+                          <strong>Location:</strong> {imageMeta.location}
+                        </p>
+                      )}
+                      {imageMeta.date && (
+                        <p>
+                          <strong>Taken on:</strong> {new Date(imageMeta.date).toLocaleString()}
+                        </p>
+                      )}
+                      {imageMeta.iso && (
+                        <p>
+                          <strong>ISO:</strong> {imageMeta.iso.toString()}
+                        </p>
+                      )}
+                      {imageMeta.aperture && (
+                        <p>
+                          <strong>Aperture:</strong> {imageMeta.aperture.toString()}
+                        </p>
+                      )}
+                      {imageMeta.shutterSpeed && (
+                        <p>
+                          <strong>Shutter Speed:</strong> {imageMeta.shutterSpeed.toString()}
+                        </p>
+                      )}
+                      {imageMeta.focalLength && (
+                        <p>
+                          <strong>Focal Length:</strong> {imageMeta.focalLength.toString()}
+                        </p>
+                      )}
+                    </>
                   )}
-                </>
-              )}
-            </div>
+                </div>
 
-            {/* Metadata Overlay */}
-            <div className="bg-black/60 rounded-md sm:rounded-lg p-3 sm:p-4 max-w-[80vw] sm:max-w-56 text-xs sm:text-sm space-y-1.5 sm:space-y-2">
-              <p className="font-semibold">Metadata</p>
-              {imageMeta && (
-                <>
-                  {imageMeta.camera && (
-                    <p>
-                      <strong>Camera:</strong> {imageMeta.camera}
-                    </p>
-                  )}
-                  {imageMeta.lens && (
-                    <p>
-                      <strong>Lens:</strong> {imageMeta.lens.toString()}
-                    </p>
-                  )}
-                  {imageMeta.resolution && (
-                    <p>
-                      <strong>Resolution:</strong> {imageMeta.resolution}
-                    </p>
-                  )}
-                  {imageMeta.location && (
-                    <p>
-                      <strong>Location:</strong> {imageMeta.location}
-                    </p>
-                  )}
-                  {imageMeta.date && (
-                    <p>
-                      <strong>Taken on:</strong> {new Date(imageMeta.date).toLocaleString()}
-                    </p>
-                  )}
-                  {imageMeta.iso && (
-                    <p>
-                      <strong>ISO:</strong> {imageMeta.iso.toString()}
-                    </p>
-                  )}
-                  {imageMeta.aperture && (
-                    <p>
-                      <strong>Aperture:</strong> {imageMeta.aperture.toString()}
-                    </p>
-                  )}
-                  {imageMeta.shutterSpeed && (
-                    <p>
-                      <strong>Shutter Speed:</strong> {imageMeta.shutterSpeed.toString()}
-                    </p>
-                  )}
-                  {imageMeta.focalLength && (
-                    <p>
-                      <strong>Focal Length:</strong> {imageMeta.focalLength.toString()}
-                    </p>
-                  )}
-                </>
-              )}
+                {/* Location meta */}
+                {imageLocationMeta && (
+                  <div className="bg-black/70 rounded-md sm:rounded-lg px-3 py-2 sm:p-4 max-w-full sm:max-w-[70vw] text-xs sm:text-sm flex items-center gap-2">
+                    {imageLocationMeta.locationText && <span className="min-w-0 truncate">{imageLocationMeta.locationText}</span>}
+                    {imageLocationMeta.mapUrl && (
+                      <a
+                        href={imageLocationMeta.mapUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ml-1 inline-flex items-center shrink-0"
+                        aria-label="Open location"
+                        title="Open location"
+                      >
+                        <MapIcon className="h-6 w-6 sm:h-6 sm:w-6" />
+                      </a>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           </motion.div>
         )}
