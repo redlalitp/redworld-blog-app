@@ -6,15 +6,15 @@ import { HiDownload } from "react-icons/hi";
 import { FcPhoneAndroid } from "react-icons/fc";
 import { MdEmail } from "react-icons/md";
 
-export function useHtml2Pdf() {
-  return useCallback(async (el: HTMLElement) => {
-    const { default: html2pdf } = await import("html2pdf.js");
-    await html2pdf().from(el).save();
-  }, []);
-}
+// export function useHtml2Pdf() {
+//   return useCallback(async (el: HTMLElement) => {
+//     const { default: html2pdf } = await import("html2pdf.js");
+//     await html2pdf().from(el).save();
+//   }, []);
+// }
 
 export default function About() {
-  const handlePdf = useHtml2Pdf();
+  //const handlePdf = useHtml2Pdf();
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-black text-gray-100">
       <Nav />
@@ -53,15 +53,15 @@ export default function About() {
                 >
                   <FaGithub className="w-6 h-6" />
                 </a>
-                <button
-                  onClick={() => {
-                    const element = document.querySelector(".container") as HTMLElement;
-                    handlePdf(element).then((r) => console.log("PDF saved!"));
-                  }}
-                  className="inline-flex items-center justify-center p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors"
-                >
-                  <HiDownload className="w-6 h-6" />
-                </button>
+                {/*<button*/}
+                {/*  onClick={() => {*/}
+                {/*    const element = document.querySelector(".container") as HTMLElement;*/}
+                {/*    handlePdf(element).then((r) => console.log("PDF saved!"));*/}
+                {/*  }}*/}
+                {/*  className="inline-flex items-center justify-center p-2 rounded-full bg-gray-700 hover:bg-gray-600 transition-colors"*/}
+                {/*>*/}
+                {/*  <HiDownload className="w-6 h-6" />*/}
+                {/*</button>*/}
               </div>
             </div>
 
@@ -91,7 +91,7 @@ export default function About() {
                 Summary
               </h2>
               <p className="text-gray-300 leading-relaxed text-sm sm:text-base">
-                Software Developer working on full stack with 11 years of experience in developing and maintaining highly
+                Software Developer working on full stack with 12 years of experience in developing and maintaining highly
                 scalable large distributed systems. Experienced in software design, implementation and integration,
                 working with team stretched across globe.
               </p>
