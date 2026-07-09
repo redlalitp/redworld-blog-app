@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useSession } from "next-auth/react";
 import { PostCard } from "./post-card";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import {MdPostAdd} from "react-icons/md";
 import { motion, useScroll, useSpring, useMotionValue } from "framer-motion";
 
@@ -24,10 +25,12 @@ export interface Post {
 }
 
 export const Posts = () => {
+    const router = useRouter();
     const { data: session } = useSession();
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [loadingPostId, setLoadingPostId] = useState<string | null>(null);
 
     // Post creation form states
     const [showPostForm, setShowPostForm] = useState(false);
@@ -79,6 +82,18 @@ export const Posts = () => {
     useEffect(() => {
         fetchPosts();
     }, []);
+
+    useEffect(() => {
+        const clearLoadingState = () => setLoadingPostId(null);
+
+        router.events.on('routeChangeComplete', clearLoadingState);
+        router.events.on('routeChangeError', clearLoadingState);
+
+        return () => {
+            router.events.off('routeChangeComplete', clearLoadingState);
+            router.events.off('routeChangeError', clearLoadingState);
+        };
+    }, [router.events]);
 
 // Removed the old scrollLeft-sync effect. Framer Motion now drives the horizontal transform.
 
@@ -390,12 +405,22 @@ const handleSubmitPost = async (e: React.FormEvent<HTMLFormElement>) => {
                         }}
                     >
                         {posts.map((post: Post) => (
-                            <Link 
-                                href={`/blog/${post._id}`} 
-                                key={post._id} 
-                                className="flex-shrink-0 min-w-[300px]"
+                            <Link
+                                href={`/blog/${post._id}`}
+                                key={post._id}
+                                className="relative flex-shrink-0 min-w-[300px]"
+                                onClick={() => setLoadingPostId(post._id)}
+                                aria-busy={loadingPostId === post._id}
                             >
                                 <PostCard {...post}></PostCard>
+                                {loadingPostId === post._id && (
+                                    <div className="absolute inset-0 z-10 flex items-center justify-center rounded-xl bg-black/55 backdrop-blur-[1px]">
+                                        <div className="flex items-center gap-3 rounded-full border border-white/15 bg-zinc-950/80 px-4 py-2 text-sm font-medium text-white shadow-lg">
+                                            <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                                            Loading post
+                                        </div>
+                                    </div>
+                                )}
                             </Link>
                         ))}
                     </motion.div>
